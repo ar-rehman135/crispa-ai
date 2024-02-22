@@ -1,0 +1,12 @@
+.tab {
+    font-size: 16px;
+    text-transform: none !important;
+    color: #9da3ae !important;
+  }
+  .css-1aquho2-MuiTabs-indicator{
+      background-color: #57e9e0 !important;
+  }
+  .Mui-selected {
+    color: #57e9e0 !important;
+  }
+  

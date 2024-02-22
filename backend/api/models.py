@@ -1,3 +1,50 @@
 from django.db import models
-
+import uuid
+from django.utils.translation import gettext_lazy as _
 # Create your models here.
+class JournalEntryLines(models.Model):
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        accounting_date=models.DateField( auto_now=False, auto_now_add=False)
+        account=models.CharField(max_length=50)
+        state=models.CharField(max_length=50)
+        description=models.CharField(max_length=200)
+        reconciled=models.BooleanField()
+        currency=models.CharField(max_length=50)
+        amount=models.IntegerField()
+
+        ACCOUNT_TYPE_CHOICES = [
+        ('debit', 'Debit'),
+        ('credit', 'Credit'),
+        ]
+        account_type = models.CharField(max_length=20, choices=ACCOUNT_TYPE_CHOICES)
+        class Meta:
+            verbose_name = _("JournalEntryLine")
+            verbose_name_plural = _("JournalEntryLines")
+        def __str__(self):
+            return self.account
+    
+    # Other fields of the UserProfile model
+class Account(models.Model):
+        number=models.CharField(max_length=4)
+        name=models.CharField(max_length=50)
+        ACCOUNT_TYPE_CHOICES = [
+        ('debit', 'Debit'),
+        ('credit', 'Credit'),
+        ]
+        default_accounting_type=models.CharField(max_length=20, choices=ACCOUNT_TYPE_CHOICES)
+        class Meta:
+            verbose_name = _("Account")
+            verbose_name_plural = _("Account")
+        def __str__(self):
+               return self.name
+class Currency(models.Model):
+        code=models.CharField(max_length=3)
+        name=models.CharField(max_length=50)
+        class Meta:
+            verbose_name = _("Currency")
+            verbose_name_plural = _("Currency")
+        def __str__(self):
+               return self.name
+               
+
+

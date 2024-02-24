@@ -12,9 +12,25 @@ export interface IStockPrice {
   symbol: string;
   timeZone: string;
 }
+
+export interface IEntryListData {
+  id: string;
+  description: string;
+  date: string;
+  account: string;
+  amount: number;
+  type: string;
+  currency: string;
+  convertedCurrency: string;
+  type2: string;
+  status: string;
+  reconciled: boolean;
+}
+
 export interface IAppState {
   stockName: string;
   stockPriceData: IStockPrice;
+  entryListData:IEntryListData[],
   stockLoading: boolean;
   monthRange: number;
 }

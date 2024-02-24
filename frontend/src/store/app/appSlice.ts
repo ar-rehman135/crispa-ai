@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { IAppState, IStockPrice } from "./types";
+import { IAppState, IEntryListData, IStockPrice} from "./types";
 import { transformStockData } from "utils";
 import { mockData } from "./mockData";
 
 export const initialState: IAppState = {
   stockName: "MSFT",
   stockPriceData: transformStockData(mockData),
+  entryListData: [],
   stockLoading: false,
   monthRange: 60
 };
@@ -24,6 +25,9 @@ const appSlice = createSlice({
     setStockPriceData: (state, action: PayloadAction<IStockPrice>) => {
       state.stockPriceData = action.payload;
     },
+    setEntryListData: (state, action: PayloadAction<IEntryListData[]>) => {
+      state.entryListData = action.payload;
+    },
     setStockLoading: (state, action: PayloadAction<boolean>) => {
       state.stockLoading = action.payload;
     },
@@ -33,7 +37,7 @@ const appSlice = createSlice({
   },
 });
 
-export const { setStockName, setStockPriceData, setStockLoading, setMonthRange } =
+export const { setStockName, setStockPriceData, setStockLoading, setMonthRange,setEntryListData } =
   appSlice.actions;
 
 export default appSlice.reducer;

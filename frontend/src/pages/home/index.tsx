@@ -5,6 +5,7 @@ import Tab from "@mui/material/Tab";
 import SharePrice from "components/tabs/sharePrice";
 
 import { StyledTabsContainer, StyledTabsWrapper } from "./index.styles";
+import EntryList from "components/tabs/entryList";
 
 interface TabPanel {
   label: string;
@@ -22,7 +23,7 @@ export default function Home() {
     () => [
       { label: "Share price", component: <SharePrice /> },
       { label: "Dashboard", component: <div>Dashboard content</div> },
-      { label: "Entry list", component: <div>Entry list content</div> },
+      { label: "Entry list", component: <EntryList /> },
     ],
     []
   );

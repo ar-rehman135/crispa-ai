@@ -31,7 +31,7 @@ const PriceForm = () => {
     setValue("timeRange", calculateMonthsBack(monthRange));
     setValue("stockName", stockName);
   }, [setValue]);
-  
+
   const numberOfMonths = calculateMonthsDifference(timeRange);
   const { fetchStockData, isLoading } = useStockPrice(stock, numberOfMonths);
 
@@ -73,12 +73,6 @@ const PriceForm = () => {
             </svg>
           }
         />
-        {/* <DatePicker
-          selected={timeRange}
-          onChange={(date) => {
-            setValue("timeRange", date);
-          }}
-        /> */}
         <SearchInput
           placeholder="Enter a stock symbol"
           {...register("stockName")}

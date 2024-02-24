@@ -5,6 +5,7 @@ import Tab from "@mui/material/Tab";
 import SharePrice from "components/tabs/sharePrice";
 
 import { StyledTabsContainer, StyledTabsWrapper } from "./index.styles";
+import Dashboard from "components/tabs/dashboard";
 
 interface TabPanel {
   label: string;
@@ -21,7 +22,7 @@ export default function Home() {
   const tabs: TabPanel[] = React.useMemo(
     () => [
       { label: "Share price", component: <SharePrice /> },
-      { label: "Dashboard", component: <div>Dashboard content</div> },
+      { label: "Dashboard", component: <Dashboard /> },
       { label: "Entry list", component: <div>Entry list content</div> },
     ],
     []

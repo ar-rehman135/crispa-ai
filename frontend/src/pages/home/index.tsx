@@ -1,43 +1,47 @@
 import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
-import SharePrice from "../../components/tabs/sharePrice";
 
-import "./index.css";
+import SharePrice from "components/tabs/sharePrice";
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
+import { StyledTabsContainer, StyledTabsWrapper } from "./index.styles";
+
+interface TabPanel {
+  label: string;
+  component: JSX.Element;
 }
 
 export default function Home() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState<number>(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
+  const tabs: TabPanel[] = React.useMemo(
+    () => [
+      { label: "Share price", component: <SharePrice /> },
+      { label: "Dashboard", component: <div>Dashboard content</div> },
+      { label: "Entry list", component: <div>Entry list content</div> },
+    ],
+    []
+  );
   return (
     <>
-      <Box sx={{ width: "100%" }}>
-        <Box
-          sx={{ borderBottom: 1, borderColor: "#9DA3AE", width: "max-content" }}
-        >
+      <StyledTabsContainer>
+        <StyledTabsWrapper>
           <Tabs
             value={value}
             onChange={handleChange}
             aria-label="basic tabs example"
           >
-            <Tab label="Share price" {...a11yProps(0)} className="tab" />
-            <Tab label="Dashboard" {...a11yProps(1)} className="tab" />
-            <Tab label="Entry list" {...a11yProps(2)} className="tab" />
+            {tabs.map((tab, index) => (
+              <Tab className="tabs" label={tab.label} key={index} />
+            ))}
           </Tabs>
-        </Box>
-      </Box>
-      {value === 0 && <SharePrice />}
+        </StyledTabsWrapper>
+      </StyledTabsContainer>
+      {tabs[value].component}
     </>
   );
 }

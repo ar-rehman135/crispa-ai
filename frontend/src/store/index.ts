@@ -1,17 +1,19 @@
-import {configureStore} from '@reduxjs/toolkit';
-import appReducer from './appReducer';
+import { configureStore } from "@reduxjs/toolkit";
+// import logger from 'redux-logger';
+
+import rootReducer from "./rootReducer";
 
 export const store = configureStore({
-  reducer: {
-    app: appReducer,
-  },
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({
+  reducer: rootReducer,
+  devTools: process.env.NODE_ENV !== "production",
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware({
       serializableCheck: false,
-    }),
+    });
+  },
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
 
 export default store;

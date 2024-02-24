@@ -1,48 +1,30 @@
-import { Card, Col, Row, Table } from "react-bootstrap";
-
-import "./index.css";
+import React from "react";
+import { GridColDef } from "@mui/x-data-grid";
+import { TableContainer, StyledDataGrid } from "./index.styles";
 
 interface IDataTables {
-  columns: string[];
+  columns: GridColDef[];
   data: any[];
+  isLoading: boolean;
 }
 
-const DataTable = ({ columns, data }: IDataTables) => {
-
+const DataTable: React.FC<IDataTables> = ({ columns, data, isLoading }) => {
   return (
-    <div className="table-container">
-      <Row className="row-sm">
-        <Col xl={12}>
-          <Card>
-            <Card.Body>
-              <div className="table-responsive">
-                <Table className="table table-bordered table-striped mg-b-0 text-md-nowrap table-width">
-                  <thead>
-                    <tr>
-                      {columns.map((column) => (
-                        <th key={column}>{column}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody style={{ textAlign: "center" }}>
-                    {data.map((list: any, index: any) => (
-                      <tr key={list.id}>
-                        <th scope="row">{list.id}</th>
-                        <td>{list.Name}</td>
-                        <td>{list.Position}</td>
-                        <td>{list.Salary}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </div>
+    <TableContainer>
+      <StyledDataGrid
+        rows={data}
+        columns={columns}
+        disableRowSelectionOnClick
+        rowCount={data.length}
+        pagination
+        loading={isLoading}
+        pageSizeOptions={[50, 100, 200]} // Default page options
+        getRowClassName={(params) =>
+          params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
+        }
+      />
+    </TableContainer>
   );
 };
-
 
 export default DataTable;

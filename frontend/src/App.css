@@ -1,8 +1,10 @@
-body {
-  background-color: #242d46 !important;
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+
+.container {
+  background-color: #252d46;
+  padding: 2rem;
 }
 
-.container-width {
-  width: 95% !important;
-  margin: auto !important;
+* {
+  font-family: "Outfit", sans-serif;
 }

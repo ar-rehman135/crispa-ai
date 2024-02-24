@@ -1,8 +1,10 @@
 import axios from "axios";
 
-export const fetchFunction = async () => {
-  const { data } = await axios.get(
-    "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&range=60month&apikey=NQFYOQ94IOYKV7IL"
+const API_KEY = "NQFYOQ94IOYKV7IL";
+
+export const fetchStockPrice = async (stockName: string, range: string) => {
+  const response = await axios.get(
+    `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${stockName}&range=${range}&apikey=${API_KEY}&outputsize=full`
   );
-  return data;
+  return response.data;
 };

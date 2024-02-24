@@ -6,6 +6,7 @@ import SharePrice from "components/tabs/sharePrice";
 
 import { StyledTabsContainer, StyledTabsWrapper } from "./index.styles";
 import Dashboard from "components/tabs/dashboard";
+import EntryList from "components/tabs/entryList";
 
 interface TabPanel {
   label: string;
@@ -23,7 +24,7 @@ export default function Home() {
     () => [
       { label: "Share price", component: <SharePrice /> },
       { label: "Dashboard", component: <Dashboard /> },
-      { label: "Entry list", component: <div>Entry list content</div> },
+      { label: "Entry list", component: <EntryList /> },
     ],
     []
   );

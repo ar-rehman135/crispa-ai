@@ -54,20 +54,23 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }: any) => ({
     backgroundColor: "#666666",
     borderRadius: "10px",
   },
-  "& .MuiDataGrid-columnHeader--filledGroup .MuiDataGrid-columnHeaderTitleContainer":{
-    display: "flex",
-    borderWidth:'2px',
-    justifyContent:'center',
-    color:'rgba(102, 102, 102, 1)'
-  },
-  
-  "& .MuiDataGrid-columnHeader--filledGroup:nth-child(4) .MuiDataGrid-columnHeaderTitleContainer": {
-    borderColor: "rgba(78, 128, 238, 1)" , /* Border color for child one */
-  },
-  
-  "& .MuiDataGrid-columnHeader--filledGroup:nth-child(2) .MuiDataGrid-columnHeaderTitleContainer": {
-    borderColor: "rgba(87, 233, 224, 1)" , /* Border color for child two */
-  }
+  "& .MuiDataGrid-columnHeader--filledGroup .MuiDataGrid-columnHeaderTitleContainer":
+    {
+      display: "flex",
+      borderWidth: "2px",
+      justifyContent: "center",
+      color: "rgba(102, 102, 102, 1)",
+    },
+
+  "& .MuiDataGrid-columnHeader--filledGroup:nth-child(4) .MuiDataGrid-columnHeaderTitleContainer":
+    {
+      borderColor: "rgba(78, 128, 238, 1)" /* Border color for child one */,
+    },
+
+  "& .MuiDataGrid-columnHeader--filledGroup:nth-child(2) .MuiDataGrid-columnHeaderTitleContainer":
+    {
+      borderColor: "rgba(87, 233, 224, 1)" /* Border color for child two */,
+    },
 }));
 
 export const TableContainer = styled(Grid)`

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_KEY = "NQFYOQ94IOYKV7IL";
 const ENTRY_LIST_END_POINT = "all_data/";
-const BASE_URL = "http://127.0.0.1:8000/api/";
+const BASE_URL = "http://192.168.1.8:8000/api/";
 
 export const fetchStockPrice = async (stockName: string) => {
   const response = await axios.get(
@@ -11,10 +11,7 @@ export const fetchStockPrice = async (stockName: string) => {
   return response.data;
 };
 
-
 export const fetchEntryListTableData = async () => {
-  const response = await axios.get(
-    `${BASE_URL}${ENTRY_LIST_END_POINT}`
-  );
+  const response = await axios.get(`${BASE_URL}${ENTRY_LIST_END_POINT}`);
   return response.data;
 };

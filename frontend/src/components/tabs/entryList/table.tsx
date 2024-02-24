@@ -205,9 +205,13 @@ const columnGroupingModel: GridColumnGroupingModel = [
   },
 ];
 
-const EntryListTable = () => {
+interface IEntryListTable {
+  isLoading: boolean;
+}
+
+const EntryListTable = ({ isLoading }: IEntryListTable) => {
   const { entryListData } = useAppSelector(getAppDataSelector);
-  const { isLoading } = useEntryListData();
+
   return (
     <TableContainer>
       <Grid container>

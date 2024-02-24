@@ -1,32 +1,12 @@
-import React, { useState } from "react";
 import { ApexOptions } from "apexcharts";
 import moment from "moment";
-import { toast } from "react-toastify";
-import { CircularProgress } from "@mui/material";
-
-import { useAppDispatch, useAppSelector } from "hooks/useReduxTypedHooks";
-import {
-  getAppDataSelector,
-  setStockLoading,
-  setStockName,
-  setStockPriceData,
-} from "store/app";
+import { useAppSelector } from "hooks/useReduxTypedHooks";
+import { getAppDataSelector } from "store/app";
 import LineChart from "components/chart";
-import { fetchStockPrice } from "apis/api";
-import { transformStockData } from "utils";
 import { IStockPriceData } from "store/app/types";
 
-import {
-  ChartContainer,
-  StyledHeading,
-  StyledSubHeading,
-  TableHeader,
-  SearchContainer,
-  StartingMonth,
-  SearchInput,
-  DateInput,
-  UpdateButton,
-} from "./index.styles";
+import PriceForm from "./form";
+import { ChartContainer } from "./index.styles";
 
 const generateXAxisCategories = (data: IStockPriceData[]) => {
   return data.map((item) => {
@@ -35,37 +15,8 @@ const generateXAxisCategories = (data: IStockPriceData[]) => {
   });
 };
 
-const SharePriceChart = () => {
-  const [timeRange, setTimeRange] = React.useState<string>("60months");
-  const dispatch = useAppDispatch();
-  const { stockName, stockPriceData, stockLoading } =
-    useAppSelector(getAppDataSelector);
-  const [stock, setStock] = useState<string>(stockName);
-
-  const handleStockNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStock(e.target.value);
-  };
-
-  const handleTimeRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTimeRange(e.target.value);
-  };
-
-  const handleUpdateButtonClick = async () => {
-    dispatch(setStockLoading(true));
-    try {
-      const range = "60months"; // need to make dynamic
-      const data = await fetchStockPrice(stockName, range);
-      if (data && data["Information"]) {
-        toast.warn(data["Information"]);
-      }
-      const transformedData = transformStockData(data);
-      dispatch(setStockName(stockName));
-      dispatch(setStockPriceData(transformedData));
-      dispatch(setStockLoading(false));
-    } catch (error) {
-      dispatch(setStockLoading(false));
-    }
-  };
+const PriceChart = () => {
+  const { stockPriceData } = useAppSelector(getAppDataSelector);
 
   const options: ApexOptions = {
     chart: {
@@ -190,34 +141,7 @@ const SharePriceChart = () => {
 
   return (
     <ChartContainer>
-      <TableHeader>
-        <div>
-          <StyledHeading>Share Price</StyledHeading>
-          <StyledSubHeading>USD</StyledSubHeading>
-        </div>
-        <SearchContainer>
-          <StartingMonth>Starting Month</StartingMonth>
-          <DateInput
-            type="date"
-            onChange={handleTimeRangeChange}
-            value={timeRange}
-          />
-          <SearchInput
-            placeholder="Enter a stock symbol"
-            name="stockName"
-            onChange={handleStockNameChange}
-            value={stock}
-          />
-          <UpdateButton
-            variant="contained"
-            color="primary"
-            onClick={handleUpdateButtonClick}
-            disabled={stockLoading}
-          >
-            {stockLoading ? <CircularProgress size={20} /> : "Update"}
-          </UpdateButton>
-        </SearchContainer>
-      </TableHeader>
+      <PriceForm />
       <div id="statistics2">
         <LineChart series={series} options={options} />
       </div>
@@ -225,4 +149,4 @@ const SharePriceChart = () => {
   );
 };
 
-export default SharePriceChart;
+export default PriceChart;

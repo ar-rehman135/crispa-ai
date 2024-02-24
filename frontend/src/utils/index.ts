@@ -1,4 +1,6 @@
-export function transformStockData(data: any) {
+import moment from "moment";
+
+export function transformStockData(data: any, months: number = 60) {
   const metaData = data["Meta Data"];
   const timeSeries = data["Time Series (Daily)"];
 
@@ -11,13 +13,13 @@ export function transformStockData(data: any) {
   const monthlyData: any = {}; // Object to store monthly data
 
   const currentDate = new Date();
-  const sixYearsAgo = new Date(currentDate.getFullYear() - 6, currentDate.getMonth(), currentDate.getDate());
+  const cutoffDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - months, 1);
 
   for (const date in timeSeries) {
     const dataDate = new Date(date);
 
-    if (dataDate < sixYearsAgo) {
-      continue; // Skip data points older than six years
+    if (dataDate < cutoffDate) {
+      continue; // Skip data points older than the cutoff date
     }
 
     const dailyData = timeSeries[date];
@@ -45,9 +47,10 @@ export function transformStockData(data: any) {
   }
 
   // Convert monthly data object to an array, and reverse the order
-  const months = Object.keys(monthlyData);
-  for (let i = months.length - 1; i >= 0; i--) {
-    const month = months[i];
+  const monthsArray = Object.keys(monthlyData);
+  const lastMonths = monthsArray.slice(-months); // Get the latest 'months' entries
+  for (let i = lastMonths.length - 1; i >= 0; i--) {
+    const month = lastMonths[i];
     const { close } = monthlyData[month];
     const previousClose = transformedData.data.length > 0 ? transformedData.data[transformedData.data.length - 1].close : null;
 
@@ -67,3 +70,15 @@ export function transformStockData(data: any) {
 
   return transformedData;
 }
+
+
+export const calculateMonthsDifference = (date: string) => {
+  const currentDate = moment(); // Current date
+  const givenDate = moment(date); // Given date
+
+  return currentDate.diff(givenDate, 'months'); // Calculate the difference in months
+};
+
+export const calculateMonthsBack = (months: number) => {
+  return moment().subtract(months, 'months').format('YYYY-MM-DD');
+};

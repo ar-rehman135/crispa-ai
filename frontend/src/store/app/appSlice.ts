@@ -8,6 +8,7 @@ export const initialState: IAppState = {
   stockName: "MSFT",
   stockPriceData: transformStockData(mockData),
   stockLoading: false,
+  monthRange: 60
 };
 
 const appSlice = createSlice({
@@ -26,10 +27,13 @@ const appSlice = createSlice({
     setStockLoading: (state, action: PayloadAction<boolean>) => {
       state.stockLoading = action.payload;
     },
+    setMonthRange: (state, action: PayloadAction<number>) => {
+      state.monthRange = action.payload;
+    },
   },
 });
 
-export const { setStockName, setStockPriceData, setStockLoading } =
+export const { setStockName, setStockPriceData, setStockLoading, setMonthRange } =
   appSlice.actions;
 
 export default appSlice.reducer;

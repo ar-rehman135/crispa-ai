@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css";
+import "react-datepicker/dist/react-datepicker.css";
 
 import { ToastContainer } from "react-toastify";
 import HomePage from "./pages/home";

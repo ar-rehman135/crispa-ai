@@ -16,4 +16,5 @@ export interface IAppState {
   stockName: string;
   stockPriceData: IStockPrice;
   stockLoading: boolean;
+  monthRange: number;
 }

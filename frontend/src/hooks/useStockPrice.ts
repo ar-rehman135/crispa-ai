@@ -1,39 +1,36 @@
-// api.ts
-
-import { useEffect, useState } from "react";
-
-import { transformStockData } from "utils";
-import { fetchStockPrice } from "apis/api";
-import { setStockLoading, setStockName, setStockPriceData } from "store/app";
-import { useAppDispatch } from "./useReduxTypedHooks";
+import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 
-export const useStockPrice = (stockName: string, range: string = "60month") => {
+import { useAppDispatch } from "./useReduxTypedHooks";
+import { transformStockData } from "utils";
+import { fetchStockPrice } from "apis/api";
+import { setStockPriceData } from "store/app";
+
+export const useStockPrice = (stockName: string, numberOfMonths: number = 60) => {
   const dispatch = useAppDispatch();
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const getStockPrice = async () => {
-      dispatch(setStockLoading(true));
-      try {
-        const data = await fetchStockPrice(stockName, range);
-        if (data && data["Information"]) {
-          toast.warn(data["Information"]);
-        }
-        const transformedData = transformStockData(data);
-        dispatch(setStockName(stockName));
+  const { isLoading, isError, error, refetch } = useQuery(["stockPrice", stockName], () => fetchStockPrice(stockName), {
+    enabled: false, // Disable automatic data fetching on mount
+    onSuccess: (data) => {
+      if (data["Meta Data"]) {
+        const transformedData = transformStockData(data, numberOfMonths);
         dispatch(setStockPriceData(transformedData));
-        dispatch(setStockLoading(false));
-      } catch (error) {
-        setError("Error fetching stock price");
-        dispatch(setStockLoading(false));
+      } else if (data["Error Message"]) {
+        toast.error(data["Error Message"]);
       }
-    };
-
-    if (stockName) {
-      getStockPrice();
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : "Error fetching stock price");
     }
-  }, [stockName, dispatch, range]);
+  });
 
-  return { error };
+  const fetchStockData = async () => {
+    try {
+      await refetch();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error fetching stock price");
+    }
+  };
+
+  return { isLoading, error, fetchStockData };
 };

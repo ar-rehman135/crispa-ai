@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { IAppState, IEntryListData, IStockPrice} from "./types";
 import { transformStockData } from "utils";
-import { mockData } from "./mockData";
+import { mockData, mockDataEntryList } from "./mockData";
 
 export const initialState: IAppState = {
   stockName: "MSFT",
   stockPriceData: transformStockData(mockData),
-  entryListData: [],
+  entryListData: mockDataEntryList,
   stockLoading: false,
   monthRange: 60
 };

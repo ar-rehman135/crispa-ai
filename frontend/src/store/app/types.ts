@@ -22,7 +22,7 @@ export interface IEntryListData {
   type: string;
   currency: string;
   convertedCurrency: string;
-  type2: string;
+  defaultType: string;
   status: string;
   reconciled: boolean;
 }

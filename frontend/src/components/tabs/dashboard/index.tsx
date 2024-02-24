@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 import CashOnHandChart from "./cash-on-hand";
-import MonthlyCashFlowChart from "./monthly-cash-flow";
+import MonthlyCashFlowChart from "./cash-on-hand copy";
 
 export default function Dashboard() {
   return (

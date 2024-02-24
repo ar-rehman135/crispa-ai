@@ -71,6 +71,9 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }: any) => ({
     {
       borderColor: "rgba(87, 233, 224, 1)" /* Border color for child two */,
     },
+    "& .MuiCircularProgress-svg":{
+      color:"#252D46",
+    }
 }));
 
 export const TableContainer = styled(Grid)`

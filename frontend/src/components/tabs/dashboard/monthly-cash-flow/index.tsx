@@ -4,6 +4,7 @@ import moment from "moment";
 
 import DynamicChart from "components/chart";
 
+import Legend from "./legend";
 import {
   ChartContainer,
   StyledDivHeadingContainer,
@@ -11,7 +12,7 @@ import {
   StyledSelect,
   StyledSubHeading,
 } from "./index.styles";
-import Legend from "./legend";
+import { COLORS } from "colors";
 
 interface CashFlowData {
   date: Date;
@@ -92,7 +93,7 @@ const MonthlyCashFlowChart = () => {
         top: 5,
         left: 0,
         blur: 3,
-        color: "#000",
+        color: COLORS.BLACK,
         opacity: 0.1,
       },
     },
@@ -112,9 +113,9 @@ const MonthlyCashFlowChart = () => {
       width: [4, 0, 0], // Setting line width for 'Net' and no line for 'Inflow' and 'Outflow'
     },
     grid: {
-      borderColor: "#f2f6f7",
+      borderColor: COLORS.LIGHT_GREY,
     },
-    colors: ["#728BBE", "#44D799", "#EC55CB"],
+    colors: [COLORS.BLUE_700, COLORS.GREEN_100, COLORS.PINK_200],
     yaxis: {
       labels: {
         formatter: function (y: number) {
@@ -127,14 +128,14 @@ const MonthlyCashFlowChart = () => {
       categories: generateXAxisCategories(cashFlowData),
       axisBorder: {
         show: true,
-        color: "rgba(119, 119, 142, 0.05)",
+        color: COLORS.SILVER_100,
         offsetX: 0,
         offsetY: 0,
       },
       axisTicks: {
         show: true,
         borderType: "solid",
-        color: "rgba(119, 119, 142, 0.05)",
+        color: COLORS.SILVER_100,
         offsetX: 0,
         offsetY: 0,
       },

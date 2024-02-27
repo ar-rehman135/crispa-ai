@@ -8,7 +8,6 @@ import DataTable from "components/datatable";
 import { TableContainer } from "./index.styles";
 import { useAppSelector } from "hooks/useReduxTypedHooks";
 import { getAppDataSelector } from "store/app";
-import { useEntryListData } from "hooks/useEntryListData";
 
 const chipColors = {
   BOOKED: { backgroundColor: "#D0F2F0", textColor: "#11D1C6" },

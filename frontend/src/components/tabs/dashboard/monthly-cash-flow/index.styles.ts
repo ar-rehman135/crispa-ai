@@ -1,14 +1,16 @@
 import styled from "@emotion/styled";
 import { Stack } from "@mui/material";
 
+import { COLORS } from "colors";
+
 export const ChartContainer = styled("div")`
   margin-top: 20px;
-  background-color: white;
+  background-color: ${COLORS.WHITE};
   border-radius: 16px;
   padding: 20px;
   .custom-tooltip {
-    background-color: black;
-    color: white;
+    background-color: ${COLORS.BLACK};
+    color: ${COLORS.WHITE};
     padding: 10px 15px;
     width: 250px;
     border-radius: 10px;
@@ -17,7 +19,7 @@ export const ChartContainer = styled("div")`
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #44d799;
+    background: ${COLORS.GREEN_100};
   }
   .flex {
     display: flex;
@@ -29,13 +31,13 @@ export const ChartContainer = styled("div")`
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #728bbe;
+    background: ${COLORS.BLUE_700};
   }
   .pink-dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #ec56cb;
+    background: ${COLORS.PINK_100};
   }
   .icon-reverse {
     position: absolute;
@@ -66,11 +68,11 @@ export const StyledSelect = styled.select({
   height: "40px",
   fontSize: 14,
   padding: "0px 10px",
-  border: "1px solid #d8d5e2 !important",
-  color: "#43B3F2",
+  border: `1px solid ${COLORS.GREEN_100} !important`,
+  color: COLORS.BLUE_400,
   fontWeight: 700,
   ":focus": {
-    border: "1px solid #d8d5e2 !important",
+    border: `1px solid ${COLORS.GREEN_100} !important`,
   },
 });
 
@@ -92,7 +94,7 @@ export const TextContainer = styled("div")(({ color }) => ({
   gap: 10,
   color,
   fontWeight: "bold",
-  padding: "0px 20px"
+  padding: "0px 20px",
 }));
 
 export const Dot = styled("div")(({ color }) => ({

@@ -1,7 +1,6 @@
 import { ApexOptions } from "apexcharts";
 import moment from "moment";
 import DynamicChart from "components/chart";
-import { IStockPriceData } from "store/app/types";
 
 import {
   ChartContainer,

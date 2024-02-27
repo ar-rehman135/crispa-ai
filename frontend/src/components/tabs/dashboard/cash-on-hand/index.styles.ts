@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Chip, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 
 export const ChartContainer = styled("div")`
   margin-top: 20px;
@@ -43,7 +43,6 @@ export const ChartContainer = styled("div")`
     top: 5px;
   }
   .flex-cash {
-    
   }
 `;
 

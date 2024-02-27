@@ -1,15 +1,15 @@
+import React, { useEffect, useState } from "react";
 import { ApexOptions } from "apexcharts";
 import moment from "moment";
-import DynamicChart from "components/chart";
 
+import DynamicChart from "components/chart";
+import Legend from "./legend";
 import {
   ChartContainer,
   StyledHeading,
   StyledSubHeading,
 } from "./index.styles";
-import React, { useEffect, useState } from "react";
-import Legend from "./legend";
-
+import { COLORS } from "colors";
 interface CashBalanceData {
   date: Date;
   cashBalance: number;
@@ -148,7 +148,7 @@ const CashChart = React.memo(() => {
         top: 5,
         left: 0,
         blur: 3,
-        color: "#000",
+        color: COLORS.BLACK,
         opacity: 0.1,
       },
     },

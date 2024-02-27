@@ -1,7 +1,7 @@
 import ReactApexChart from "react-apexcharts";
 
 interface ILineChart {
-    chartData: any
+  chartData: any;
 }
 
 const LineChart = ({ chartData }: ILineChart) => {

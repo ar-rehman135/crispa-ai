@@ -1,15 +1,20 @@
 import React from "react";
-import { GridColDef ,GridColumnGroupingModel } from "@mui/x-data-grid";
+import { GridColDef, GridColumnGroupingModel } from "@mui/x-data-grid";
 import { TableContainer, StyledDataGrid } from "./index.styles";
 
 interface IDataTables {
   columns: GridColDef[];
   data: any[];
   isLoading: boolean;
-  columnGroupingModel?:GridColumnGroupingModel 
+  columnGroupingModel?: GridColumnGroupingModel;
 }
 
-const DataTable: React.FC<IDataTables> = ({ columns, data, isLoading, columnGroupingModel }) => {
+const DataTable: React.FC<IDataTables> = ({
+  columns,
+  data,
+  isLoading,
+  columnGroupingModel,
+}) => {
   return (
     <TableContainer>
       <StyledDataGrid

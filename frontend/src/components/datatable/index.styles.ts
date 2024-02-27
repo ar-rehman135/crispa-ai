@@ -3,9 +3,10 @@ import { Grid } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { DataGrid, gridClasses } from "@mui/x-data-grid";
 
-const ODD_OPACITY = 0.2;
+import { ITheme } from "theme/types";
 
-export const StyledDataGrid = styled(DataGrid)(({ theme }: any) => ({
+const ODD_OPACITY = 0.2;
+export const StyledDataGrid = styled(DataGrid)<ITheme>(({ theme }) => ({
   border: "none !important",
 
   [`& .${gridClasses.row}.even`]: {
@@ -15,12 +16,12 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }: any) => ({
     },
     "&.Mui-selected": {
       backgroundColor: alpha(
-        theme.palette.primary.main,
+        theme.palette.background.default,
         ODD_OPACITY + theme.palette.action.selectedOpacity
       ),
       "&:hover, &.Mui-hovered": {
         backgroundColor: alpha(
-          theme.palette.primary.main,
+          theme.palette.background.default,
           ODD_OPACITY +
             theme.palette.action.selectedOpacity +
             theme.palette.action.hoverOpacity
@@ -28,7 +29,7 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }: any) => ({
         // Reset on touch devices, it doesn't add specificity
         "@media (hover: none)": {
           backgroundColor: alpha(
-            theme.palette.primary.main,
+            theme.palette.background.default,
             ODD_OPACITY + theme.palette.action.selectedOpacity
           ),
         },
@@ -36,22 +37,21 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }: any) => ({
     },
   },
   "& .MuiDataGrid-columnHeaderTitle": {
-    color: " #666666",
+    color: theme.palette.grey[300],
     fontWeight: "bolder",
     fontSize: "16px",
     textTransform: "uppercase",
-    borderBottom: "1px solid red",
   },
   "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
     width: "0.4em",
     height: "0.4em",
   },
   "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-track": {
-    background: "white",
+    background: theme.palette.background.default,
     borderRadius: "7px",
   },
   "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
-    backgroundColor: "#666666",
+    backgroundColor: theme.palette.grey[300],
     borderRadius: "10px",
   },
   "& .MuiDataGrid-columnHeader--filledGroup .MuiDataGrid-columnHeaderTitleContainer":
@@ -59,28 +59,28 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }: any) => ({
       display: "flex",
       borderWidth: "2px",
       justifyContent: "center",
-      color: "rgba(102, 102, 102, 1)",
+      color: theme.palette.grey[300],
     },
 
   "& .MuiDataGrid-columnHeader--filledGroup:nth-child(4) .MuiDataGrid-columnHeaderTitleContainer":
     {
-      borderColor: "rgba(78, 128, 238, 1)" /* Border color for child one */,
+      borderColor: theme.palette.secondary[200],
     },
 
   "& .MuiDataGrid-columnHeader--filledGroup:nth-child(2) .MuiDataGrid-columnHeaderTitleContainer":
     {
-      borderColor: "rgba(87, 233, 224, 1)" /* Border color for child two */,
+      borderColor: theme.palette.secondary[300],
     },
-    "& .MuiCircularProgress-svg":{
-      color:"#252D46",
-    }
+  "& .MuiCircularProgress-svg": {
+    color: theme.palette.primary.main,
+  },
 }));
 
-export const TableContainer = styled(Grid)`
-  display: flex;
-  background-color: white;
-  margin: 1rem;
-  border-radius: 8px 8px 0 0;
-  height: 700px;
-  overflow: none;
-`;
+export const TableContainer = styled(Grid)<ITheme>(({ theme }) => ({
+  display: "flex",
+  backgroundColor: theme.palette.background.default,
+  margin: "1rem",
+  borderRadius: "8px 8px 0 0",
+  height: "700px",
+  overflow: "none",
+}));

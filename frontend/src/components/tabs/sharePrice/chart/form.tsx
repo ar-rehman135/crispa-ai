@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { CircularProgress } from "@mui/material";
 import { useForm } from "react-hook-form";
-import DatePicker from "react-datepicker";
 
 import { useAppDispatch, useAppSelector } from "hooks/useReduxTypedHooks";
 import { getAppDataSelector, setMonthRange, setStockName } from "store/app";
@@ -30,6 +29,7 @@ const PriceForm = () => {
   useEffect(() => {
     setValue("timeRange", calculateMonthsBack(monthRange));
     setValue("stockName", stockName);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setValue]);
 
   const numberOfMonths = calculateMonthsDifference(timeRange);

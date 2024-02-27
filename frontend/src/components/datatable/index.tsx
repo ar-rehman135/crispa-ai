@@ -7,6 +7,7 @@ interface IDataTables {
   data: any[];
   isLoading: boolean;
   columnGroupingModel?: GridColumnGroupingModel;
+  height?: string | number;
 }
 
 const DataTable: React.FC<IDataTables> = ({
@@ -14,9 +15,10 @@ const DataTable: React.FC<IDataTables> = ({
   data,
   isLoading,
   columnGroupingModel,
+  height = 700,
 }) => {
   return (
-    <TableContainer>
+    <TableContainer height={height}>
       <StyledDataGrid
         rows={data}
         columns={columns}

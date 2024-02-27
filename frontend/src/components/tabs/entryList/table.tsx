@@ -3,194 +3,140 @@ import {
   GridColDef,
   GridColumnGroupingModel,
 } from "@mui/x-data-grid";
-import { Chip, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
+
 import DataTable from "components/datatable";
-import { TableContainer } from "./index.styles";
 import { useAppSelector } from "hooks/useReduxTypedHooks";
 import { getAppDataSelector } from "store/app";
 import { COLORS } from "colors";
+import { CustomChip } from "components/chip";
+import { capitalizeFirstLetter, getChipColors } from "utils";
 
-const chipColors = {
-  BOOKED: { backgroundColor: COLORS.primary?.[200], textColor: COLORS.primary?.[600] },
-  DRAFT: { backgroundColor: COLORS.secondary?.[600], textColor: COLORS.secondary?.[200] },
-  OVERDUE: { backgroundColor: COLORS.success?.[400], textColor: COLORS.warning?.[100] },
-  VOIDED: { backgroundColor: COLORS.success?.[300], textColor: COLORS.success?.[200] },
-  DEFAULT: { backgroundColor: COLORS.common?.white, textColor: COLORS.common?.black },
-};
+import { TableContainer } from "./index.styles";
 
-const getChipColors = (status) => chipColors[status] || chipColors.DEFAULT;
-
-const capitalizeFirstLetter = (value) =>
-  value.charAt(0).toUpperCase() + value.slice(1);
 const renderCapitalizedCell = (params: GridCellParams) =>
-  capitalizeFirstLetter(params.value);
+  capitalizeFirstLetter(params.value as string);
+
 const columns: GridColDef[] = [
   {
     field: "id",
     headerName: "ID",
-    width: 100,
-    align: "left",
-    headerAlign: "left",
-    sortable: false,
-    disableColumnMenu: true,
     renderCell: (params: GridCellParams) => (params.value as string).slice(-4),
+    minWidth: 100,
   },
   {
     field: "description",
     headerName: "DESCRIPTION",
-    width: 200,
-    align: "left",
-    headerAlign: "left",
-    sortable: false,
-    disableColumnMenu: true,
+    minWidth: 250,
   },
   {
     field: "date",
     headerName: "DATE",
-    width: 110,
-    align: "left",
-    headerAlign: "left",
-    sortable: false,
-    disableColumnMenu: true,
+    minWidth: 100,
   },
   {
     field: "account",
     headerName: "ACCOUNT",
-    width: 130,
-    align: "left",
-    headerAlign: "left",
-    sortable: false,
-    disableColumnMenu: true,
+    minWidth: 180,
   },
   {
     field: "type",
     headerName: "TYPE",
-    width: 130,
-    align: "left",
-    headerAlign: "left",
-    sortable: false,
-    disableColumnMenu: true,
     renderCell: renderCapitalizedCell,
+    minWidth: 100,
   },
   {
     field: "currency",
     headerName: "CURRENCY",
-    width: 130,
-    align: "left",
-    headerAlign: "left",
-    sortable: false,
-    disableColumnMenu: true,
+    minWidth: 150,
   },
   {
     field: "amount",
     headerName: "NET",
-    width: 130,
-    align: "left",
-    headerAlign: "left",
-    sortable: false,
-    disableColumnMenu: true,
+    minWidth: 110,
   },
   {
     field: "fxRate",
     headerName: "FX RATE",
-    width: 130,
-    align: "left",
-    headerAlign: "left",
-    sortable: false,
-    disableColumnMenu: true,
     renderCell: () => {
       return 7.45;
     },
+    minWidth: 150,
   },
   {
     field: "convertedCurrency",
-    headerName: "CONVERTED CURRENCY",
-    width: 250,
-    align: "left",
-    headerAlign: "left",
-    sortable: false,
-    disableColumnMenu: true,
+    headerName: "CURRENCY",
     renderCell: () => "EDK",
+    minWidth: 150,
   },
   {
     field: "convertedNet",
-    headerName: "CONVERTED NET",
-    width: 170,
-    align: "left",
-    headerAlign: "left",
-    sortable: false,
-    disableColumnMenu: true,
+    headerName: "NET",
+    align: "right",
+    headerAlign: "right",
     renderCell: (params: GridCellParams) => {
       const convertedNetValue = 7.45;
       const amountValue = params.row.amount;
       const result = convertedNetValue * amountValue;
       return result.toFixed(2);
     },
+    minWidth: 110,
   },
   {
     field: "defaultType",
     headerName: "TYPE",
-    width: 130,
-    align: "left",
-    headerAlign: "left",
-    sortable: false,
-    disableColumnMenu: true,
-    renderCell: (params: GridCellParams) => {
-      const { backgroundColor, textColor } = getChipColors(
-        (params.value as string).toUpperCase()
-      );
-      return (
-        <Chip
-          label={(params.value as string).toUpperCase()}
-          size="small"
-          style={{ backgroundColor, color: textColor }}
-        />
-      );
-    },
+    minWidth: 120,
+    renderCell: renderCapitalizedCell,
   },
   {
     field: "status",
     headerName: "STATUS",
-    width: 120,
+    minWidth: 120,
     renderCell: (params: GridCellParams) => {
-      const statusValue = (params.value as string).toUpperCase();
-      const { backgroundColor, textColor } = getChipColors(statusValue);
+      const label = (params.value as string).toUpperCase();
+      const { backgroundColor, textColor } = getChipColors(label);
       return (
-        <Chip
-          label={statusValue as string}
-          size="small"
-          style={{
-            backgroundColor,
-            color: textColor,
-          }}
+        <CustomChip
+          label={label}
+          backgroundColor={backgroundColor}
+          textColor={textColor}
         />
       );
     },
-    align: "left",
-    headerAlign: "left",
-    sortable: false,
-    disableColumnMenu: true,
   },
   {
     field: "reconciled",
     headerName: "RECONCILED",
-    width: 130,
+    minWidth: 200,
     renderCell: (params: GridCellParams) => {
+      const backgroundColor = params.value
+        ? COLORS.info?.[100]
+        : COLORS.info?.[200];
+      const textColor = params.value
+        ? COLORS.success?.[100]
+        : COLORS.warning?.[100];
+      const label = params.value ? "YES" : "NO";
       return (
-        <Chip
-          label={params.value ? "YES" : "NO"}
-          size="small"
-          style={{
-            backgroundColor: params.value
-              ? COLORS.info?.[100]
-              : COLORS.info?.[200],
-            color: params.value ? COLORS.success?.[100] : COLORS.warning?.[100],
-          }}
+        <CustomChip
+          label={label}
+          backgroundColor={backgroundColor}
+          textColor={textColor}
         />
       );
     },
   },
 ];
+
+columns.forEach((col: GridColDef) => {
+  col.disableColumnMenu = true;
+  if (col.headerName === "NET" || col.headerName === "FX RATE") {
+    col.align = "right";
+    col.headerAlign = "right";
+    return;
+  }
+  col.align = "left";
+  col.headerAlign = "left";
+});
 
 const columnGroupingModel: GridColumnGroupingModel = [
   {
@@ -221,6 +167,7 @@ const EntryListTable = ({ isLoading }: IEntryListTable) => {
             data={entryListData}
             isLoading={isLoading}
             columnGroupingModel={columnGroupingModel}
+            height={"calc(100vh - 150px)"}
           />
         </Grid>
       </Grid>

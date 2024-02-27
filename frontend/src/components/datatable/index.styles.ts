@@ -80,7 +80,6 @@ export const TableContainer = styled(Grid)<ITheme>(({ theme }) => ({
   display: "flex",
   backgroundColor: theme.palette.background.default,
   margin: "1rem",
-  borderRadius: "8px 8px 0 0",
-  height: "700px",
+  borderRadius: "8px",
   overflow: "none",
 }));

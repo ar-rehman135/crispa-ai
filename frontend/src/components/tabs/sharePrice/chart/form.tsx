@@ -1,14 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 import { useAppDispatch, useAppSelector } from "hooks/useReduxTypedHooks";
-import { getAppDataSelector, setMonthRange, setStockName } from "store/app";
+import {
+  getAppDataSelector,
+  setMonthRange,
+  setStockName,
+  setStockPriceData,
+} from "store/app";
 import { useStockPrice } from "hooks/useStockPrice";
 import { ReactComponent as CalendarIcon } from "assets/calendar.svg";
 
-import { calculateMonthsDifference, calculateMonthsBack } from "utils";
-import { COLORS } from "colors";
+import {
+  calculateMonthsDifference,
+  calculateMonthsBack,
+  transformStockData,
+} from "utils";
 
 import {
   StyledHeading,
@@ -25,6 +34,7 @@ const PriceForm = () => {
   const dispatch = useAppDispatch();
   const { stockName, monthRange } = useAppSelector(getAppDataSelector);
   const { register, handleSubmit, setValue, watch } = useForm();
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const stock = watch("stockName");
   const timeRange = watch("timeRange");
 
@@ -36,9 +46,36 @@ const PriceForm = () => {
   }, [setValue]);
 
   const numberOfMonths = calculateMonthsDifference(timeRange);
-  const { fetchStockData, isLoading } = useStockPrice(stock, numberOfMonths);
+
+  const onSuccess = (data: any) => {
+    setIsUpdate(false);
+    if (data["Meta Data"]) {
+      // number of months of data to show on graph
+      const transformedData = transformStockData(data, numberOfMonths);
+      dispatch(setStockPriceData(transformedData));
+    } else if (data["Error Message"]) {
+      toast.error(data["Error Message"]);
+    }
+  };
+
+  const onError = (error: Error | any) => {
+    setIsUpdate(false);
+    toast.error(
+      error instanceof Error
+        ? error.message
+        : "Error fetching entry list table data"
+    );
+  };
+
+  const { isLoading, fetchStockData } = useStockPrice({
+    stockName: stock,
+    onSuccess,
+    onError,
+    enabledOnMount: false,
+  });
 
   const handleUpdateButtonClick = async () => {
+    setIsUpdate(true);
     dispatch(setStockName(stock));
     dispatch(setMonthRange(numberOfMonths));
     await fetchStockData();
@@ -71,9 +108,9 @@ const PriceForm = () => {
           variant="contained"
           color="primary"
           onClick={handleSubmit(handleUpdateButtonClick)}
-          disabled={isLoading}
+          disabled={isUpdate && isLoading}
         >
-          {isLoading ? <CircularProgress size={20} /> : "Update"}
+          {isUpdate && isLoading ? <CircularProgress size={20} /> : "Update"}
         </UpdateButton>
       </SearchContainer>
     </TableHeader>

@@ -1,34 +1,28 @@
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 
-import { useAppDispatch } from "./useReduxTypedHooks";
-import { transformStockData } from "utils";
-import { fetchStockPrice } from "apis/api";
-import { setStockPriceData } from "store/app";
+import { fetchStockPrice } from "services/api";
 
-export const useStockPrice = (
-  stockName: string,
-  numberOfMonths: number = 60
-) => {
-  const dispatch = useAppDispatch();
+interface useStockPriceOptions {
+  onSuccess?: (data: any) => void;
+  onError?: (error: any) => void;
+  enabledOnMount?: boolean;
+  stockName: string;
+}
+
+export const useStockPrice = (options: useStockPriceOptions) => {
+  const { stockName, onError, onSuccess, enabledOnMount = false } = options;
 
   const { isLoading, error, refetch } = useQuery(
     ["stockPrice", stockName],
     () => fetchStockPrice(stockName),
     {
-      enabled: false, // Disable automatic data fetching on mount
+      enabled: enabledOnMount,
       onSuccess: (data) => {
-        if (data["Meta Data"]) {
-          const transformedData = transformStockData(data, numberOfMonths);
-          dispatch(setStockPriceData(transformedData));
-        } else if (data["Error Message"]) {
-          toast.error(data["Error Message"]);
-        }
+        if (onSuccess) onSuccess(data);
       },
       onError: (error) => {
-        toast.error(
-          error instanceof Error ? error.message : "Error fetching stock price"
-        );
+        if (onError) onError(error);
       },
     }
   );

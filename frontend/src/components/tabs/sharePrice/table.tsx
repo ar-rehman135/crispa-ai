@@ -1,10 +1,12 @@
 import { GridCellParams, GridColDef } from "@mui/x-data-grid";
-import { Chip, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 
 import DataTable from "components/datatable";
 import { useAppSelector } from "hooks/useReduxTypedHooks";
 import { getAppDataSelector } from "store/app";
-import { COLORS } from "colors";
+
+import { CustomChip } from "components/chip";
+import { getChipColors } from "utils";
 
 import { TableContainer } from "./index.styles";
 
@@ -12,100 +14,70 @@ interface IPriceTable {
   isLoading: boolean;
 }
 
-const getChipColors = (value: string) => {
-  let backgroundColor = COLORS.primary?.[200];
-  let textColor = COLORS.primary?.[600];
-  switch (value) {
-    case "up":
-      backgroundColor = COLORS.primary?.[200];
-      textColor = COLORS.primary?.[600];
-      break;
-    case "down":
-      backgroundColor = COLORS.success?.[400];
-      textColor = COLORS.warning?.[100];
-      break;
-    case "flat":
-      backgroundColor = COLORS.secondary?.[600];
-      textColor = COLORS.secondary?.[200];
-      break;
-    default:
-      break;
-  }
-  return { backgroundColor, textColor };
-};
+const columns: GridColDef[] = [
+  {
+    field: "date",
+    headerName: "Date",
+    type: "string",
+    width: 150,
+    align: "left",
+    headerAlign: "left",
+  },
+  {
+    field: "open",
+    headerName: "Open",
+    type: "number",
+    width: 200,
+    align: "right",
+    headerAlign: "right",
+  },
+  {
+    field: "high",
+    headerName: "High",
+    type: "number",
+    width: 200,
+    align: "right",
+    headerAlign: "right",
+  },
+  {
+    field: "close",
+    headerName: "Close",
+    type: "number",
+    width: 200,
+    align: "right",
+    headerAlign: "right",
+  },
+  {
+    field: "volume",
+    headerName: "Volume",
+    type: "number",
+    width: 200,
+    align: "right",
+    headerAlign: "right",
+  },
+  {
+    field: "movement",
+    headerName: "Movement",
+    type: "string",
+    width: 200,
+    align: "left",
+    headerAlign: "left",
+    renderCell: (params: GridCellParams) => {
+      const label = (params.value as string).toUpperCase();
+      const { backgroundColor, textColor } = getChipColors(label);
+      return (
+        <CustomChip
+          label={label}
+          backgroundColor={backgroundColor}
+          textColor={textColor}
+        />
+      );
+    },
+  },
+];
 
 export default function SharePriceTable({ isLoading }: IPriceTable) {
   const { stockPriceData } = useAppSelector(getAppDataSelector);
-
-  const columns: GridColDef[] = [
-    {
-      field: "date",
-      headerName: "Date",
-      type: "string",
-      width: 150,
-      align: "left",
-      headerAlign: "left",
-    },
-    {
-      field: "open",
-      headerName: "Open",
-      type: "number",
-      width: 200,
-      align: "right",
-      headerAlign: "right",
-    },
-    {
-      field: "high",
-      headerName: "High",
-      type: "number",
-      width: 200,
-      align: "right",
-      headerAlign: "right",
-    },
-    {
-      field: "close",
-      headerName: "Close",
-      type: "number",
-      width: 200,
-      align: "right",
-      headerAlign: "right",
-    },
-    {
-      field: "volume",
-      headerName: "Volume",
-      type: "number",
-      width: 200,
-      align: "right",
-      headerAlign: "right",
-    },
-    {
-      field: "movement",
-      headerName: "Movement",
-      type: "string",
-      width: 200,
-      align: "left",
-      headerAlign: "left",
-      renderCell: (params: GridCellParams) => {
-        const movement = params.row.movement as string;
-        const { backgroundColor, textColor } = getChipColors(
-          movement.toLowerCase()
-        );
-        return (
-          <Chip
-            label={movement}
-            color="success"
-            variant="filled"
-            style={{
-              borderRadius: 5,
-              color: textColor,
-              backgroundColor,
-              fontWeight: "bolder",
-            }}
-          />
-        );
-      },
-    },
-  ];
 
   const data = stockPriceData.data.map((dt, index) => {
     return {
@@ -118,7 +90,12 @@ export default function SharePriceTable({ isLoading }: IPriceTable) {
     <TableContainer>
       <Grid container>
         <Grid item xs={8}>
-          <DataTable columns={columns} data={data} isLoading={isLoading} />
+          <DataTable
+            columns={columns}
+            data={data}
+            isLoading={isLoading}
+            height={"700px"}
+          />
         </Grid>
       </Grid>
     </TableContainer>

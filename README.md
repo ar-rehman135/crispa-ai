@@ -1,4 +1,4 @@
-# Crispa Full Stack Test Project Handover
+# Crispa Full Stack Project Handover
 
 ## Running the Project
 
@@ -6,22 +6,17 @@
 
 1. Clone the project repository from your GitHub account.
 2. Navigate to the backend directory.
-3. Install dependencies using pip:
-   pip install -r requirements.txt
+3. Install dependencies using pip: pip install -r requirements.txt
 
-4. Apply Django migrations:
+4. Apply Django migrations:  python manage.py migrate
 
-python manage.py migrate
-
-5. Start the backend server:
-
-python manage.py runserver
+5. Start the backend server: python manage.py runserver
 
 6.  The backend server will be accessible at http://localhost:8000.
 
 7.  Creates endpoints for each model, allowing for both single and bulk creation through POST requests. If you POST a single object (in JSON format) to these endpoints, it will create one instance. If you POST a list of objects, it will create multiple instances in bulk,
 
-    For single creation of an account, you can pass data to the create endpoint like this:
+    For a single creation of an account, you can pass data to the create endpoint like this:
 
     ```json
     {
@@ -29,8 +24,10 @@ python manage.py runserver
       "name": "string",
       "default_accounting_type": "debit"
     }
+    ```
 
     For bulk creation of accounts, you can pass an array of objects to the create endpoint:
+      ```json
       [
         {
           "number": "TEST",
@@ -53,13 +50,9 @@ python manage.py runserver
 ### Frontend:
 
 1. After cloning the project repository, navigate to the frontend directory.
-2. Install dependencies using npm or yarn:
+2. Install dependencies using npm or yarn:  npm install or yarn install
 
-npm install or yarn install
-
-3. Once dependencies are installed, start the frontend server with:
-
-npm start or yarn start
+3. Once dependencies are installed, start the frontend server with: npm start or yarn start
 
 4. The frontend will be served at http://localhost:3000.
 

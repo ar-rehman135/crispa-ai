@@ -1,28 +1,18 @@
-from django.urls import path
-from .views import *
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import (
+    CombinedListView,
+    JournalEntryLinesViewSet,
+    AccountViewSet,
+    CurrencyViewSet,
+)
+
+router = DefaultRouter()
+router.register(r"journalentrylines", JournalEntryLinesViewSet)
+router.register(r"accounts", AccountViewSet)
+router.register(r"currencies", CurrencyViewSet)
 
 urlpatterns = [
-    path(
-        "journal-entry-lines/",
-        JournalEntryLinesListCreate.as_view(),
-        name="journal-entry-lines-list",
-    ),
-    path(
-        "journal-entry-lines/<uuid:pk>/",
-        JournalEntryLinesRetrieveUpdateDestroy.as_view(),
-        name="journal-entry-lines-detail",
-    ),
-    path("accounts/", AccountListCreate.as_view(), name="accounts-list"),
-    path(
-        "accounts/<int:pk>/",
-        AccountRetrieveUpdateDestroy.as_view(),
-        name="accounts-detail",
-    ),
-    path("currencies/", CurrencyListCreate.as_view(), name="currencies-list"),
-    path(
-        "currencies/<int:pk>/",
-        CurrencyRetrieveUpdateDestroy.as_view(),
-        name="currencies-detail",
-    ),
-    path("all_data/", CombinedListView.as_view(), name="combined-objects"),
+    path("", include(router.urls)),
+    path("combinedlist/", CombinedListView.as_view(), name="combined-list"),
 ]

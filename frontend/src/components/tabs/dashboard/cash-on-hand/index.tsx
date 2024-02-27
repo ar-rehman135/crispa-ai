@@ -1,14 +1,15 @@
+import React, { useEffect, useState } from "react";
 import { ApexOptions } from "apexcharts";
 import moment from "moment";
-import DynamicChart from "components/chart";
 
+import DynamicChart from "components/chart";
+import Legend from "./legend";
 import {
   ChartContainer,
   StyledHeading,
   StyledSubHeading,
 } from "./index.styles";
-import React, { useEffect, useState } from "react";
-import Legend from "./legend";
+import { COLORS } from "colors";
 
 interface CashBalanceData {
   date: Date;
@@ -148,7 +149,7 @@ const CashChart = React.memo(() => {
         top: 5,
         left: 0,
         blur: 3,
-        color: "#000",
+        color: COLORS.common?.black,
         opacity: 0.1,
       },
     },
@@ -169,9 +170,9 @@ const CashChart = React.memo(() => {
       dashArray: [0, 5, 5], // Set the dashArray for dotted lines (0 for a solid line for Actuals)
     },
     grid: {
-      borderColor: "#f2f6f7",
+      borderColor: COLORS.grey?.[400],
     },
-    colors: ["#5343BF", "#728BBE", "#6052D9"],
+    colors: [COLORS.primary?.[100], COLORS.secondary?.[200], COLORS.primary?.[300]],
     yaxis: {
       labels: {
         formatter: function (y: number) {
@@ -187,14 +188,14 @@ const CashChart = React.memo(() => {
       categories: xAxisCategories,
       axisBorder: {
         show: true,
-        color: "rgba(119, 119, 142, 0.05)",
+        color: COLORS.grey?.[800],
         offsetX: 0,
         offsetY: 0,
       },
       axisTicks: {
         show: true,
         borderType: "solid",
-        color: "rgba(119, 119, 142, 0.05)",
+        color: COLORS.grey?.[800],
         offsetX: 0,
         offsetY: 0,
       },

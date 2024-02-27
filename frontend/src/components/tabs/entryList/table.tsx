@@ -8,13 +8,14 @@ import DataTable from "components/datatable";
 import { TableContainer } from "./index.styles";
 import { useAppSelector } from "hooks/useReduxTypedHooks";
 import { getAppDataSelector } from "store/app";
+import { COLORS } from "colors";
 
 const chipColors = {
-  BOOKED: { backgroundColor: "#D0F2F0", textColor: "#11D1C6" },
-  DRAFT: { backgroundColor: "#DEE9FC", textColor: "#4E80EE" },
-  OVERDUE: { backgroundColor: "#F2C6C6", textColor: "#EB1919" },
-  VOIDED: { backgroundColor: "#D2D2D2", textColor: "#3D3D3D" },
-  DEFAULT: { backgroundColor: "#ffffff", textColor: "#000000" },
+  BOOKED: { backgroundColor: COLORS.primary?.[200], textColor: COLORS.primary?.[600] },
+  DRAFT: { backgroundColor: COLORS.secondary?.[600], textColor: COLORS.secondary?.[200] },
+  OVERDUE: { backgroundColor: COLORS.success?.[400], textColor: COLORS.warning?.[100] },
+  VOIDED: { backgroundColor: COLORS.success?.[300], textColor: COLORS.success?.[200] },
+  DEFAULT: { backgroundColor: COLORS.common?.white, textColor: COLORS.common?.black },
 };
 
 const getChipColors = (status) => chipColors[status] || chipColors.DEFAULT;
@@ -181,9 +182,9 @@ const columns: GridColDef[] = [
           size="small"
           style={{
             backgroundColor: params.value
-              ? "rgba(11, 194, 117, 0.25)"
-              : "rgba(242, 198, 198, 1)",
-            color: params.value ? "#03A661" : "#EB1919",
+              ? COLORS.info?.[100]
+              : COLORS.info?.[200],
+            color: params.value ? COLORS.success?.[100] : COLORS.warning?.[100],
           }}
         />
       );

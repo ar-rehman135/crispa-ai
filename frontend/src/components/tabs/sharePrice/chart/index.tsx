@@ -8,6 +8,8 @@ import { IStockPriceData } from "store/app/types";
 import PriceForm from "./form";
 import { ChartContainer } from "./index.styles";
 
+import { COLORS } from "colors";
+
 const generateXAxisCategories = (data: IStockPriceData[]) => {
   return data.map((item) => {
     const formattedDate = moment(item.date).format("MMM").charAt(0);
@@ -30,7 +32,7 @@ const PriceChart = () => {
         top: 5,
         left: 0,
         blur: 3,
-        color: "#000",
+        color: COLORS.common?.black,
         opacity: 0.1,
       },
     },
@@ -48,9 +50,9 @@ const PriceChart = () => {
       width: 3,
     },
     grid: {
-      borderColor: "#f2f6f7",
+      borderColor: COLORS.grey?.[400],
     },
-    colors: ["#5343BF"],
+    colors: [COLORS.primary?.[100]],
 
     yaxis: {
       labels: {
@@ -64,14 +66,14 @@ const PriceChart = () => {
       categories: generateXAxisCategories(stockPriceData.data),
       axisBorder: {
         show: true,
-        color: "rgba(119, 119, 142, 0.05)",
+        color: COLORS.primary?.[100],
         offsetX: 0,
         offsetY: 0,
       },
       axisTicks: {
         show: true,
         borderType: "solid",
-        color: "rgba(119, 119, 142, 0.05)",
+        color: COLORS.primary?.[100],
         offsetX: 0,
         offsetY: 0,
       },

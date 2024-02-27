@@ -1,13 +1,15 @@
 import styled from "@emotion/styled";
 import { Button, Card } from "@mui/material";
 import ReactDatePicker from "react-datepicker";
-export const ChartContainer = styled("div")`
+import { ITheme } from "theme/types";
+
+export const ChartContainer = styled("div")<ITheme>`
   margin-top: 20px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.palette.common.white};
   border-radius: 16px;
   padding: 20px;
   .custom-tooltip {
-    background-color: black;
+    background-color: ${({ theme }) => theme.palette.common.black};
     color: white;
     padding: 10px 15px;
     width: 250px;
@@ -17,7 +19,7 @@ export const ChartContainer = styled("div")`
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #57e9e0;
+    background: ${({ theme }) => theme.palette.secondary[300]};
   }
   .flex {
     display: flex;
@@ -29,13 +31,13 @@ export const ChartContainer = styled("div")`
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #4e80ee;
+    background: ${({ theme }) => theme.palette.secondary[200]};
   }
   .pink-dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #ec55cb;
+    background: ${({ theme }) => theme.palette.secondary[800]};
   }
   .icon-reverse {
     position: absolute;
@@ -89,8 +91,8 @@ export const SearchContainer = styled("div")`
   margin-right: 30px;
 `;
 
-export const StartingMonth = styled("h4")`
-  color: #282828;
+export const StartingMonth = styled("h4")<ITheme>`
+  color: ${({ theme }) => theme.palette.secondary[800]};
   font-size: 16px;
   font-weight: 700;
   margin: 0 !important;
@@ -99,22 +101,22 @@ export const StartingMonth = styled("h4")`
   text-decoration: none !important;
 `;
 
-export const SearchInput = styled.input`
+export const SearchInput = styled.input<ITheme>`
   width: 200px;
   border-radius: 6px;
   font-size: 14px !important;
   padding: 10px;
-  border: 1px solid #d8d5e2 !important;
+  border: 1px solid ${({ theme }) => theme.palette.grey[500]}!important;
   :focus {
-    border: 1px solid #d8d5e2 !important;
-    outline: 1px solid #d8d5e2 !important;
+    border: 1px solid ${({ theme }) => theme.palette.grey[500]}!important;
+    outline: 1px solid ${({ theme }) => theme.palette.grey[500]} !important;
   }
   margin-left: 20px;
   margin-right: 20px;
 `;
 
-export const DateInput = styled(ReactDatePicker)`
-  border: 1px solid #d8d5e2;
+export const DateInput = styled(ReactDatePicker)<ITheme>`
+  border: 1px solid ${({ theme }) => theme.palette.grey[500]}
   border-radius: 6px;
   font-size: 14px !important;
   padding: 10px !important;
@@ -124,12 +126,12 @@ export const DateInput = styled(ReactDatePicker)`
   margin-left: 20px;
 `;
 
-export const UpdateButton = styled(Button)`
-  background-color: #57e9e0 !important;
+export const UpdateButton = styled(Button)<ITheme>`
+  background-color: ${({ theme }) => theme.palette.secondary[300]} !important;
   width: 100px;
   text-transform: none !important;
-  color: #115c5e !important;
-  border: 2px solid #2dd4cf !important;
+  color: ${({ theme }) => theme.palette.info[300]} !important;
+  border: 2px solid ${({ theme }) => theme.palette.warning[200]} !important;
   border-radius: 8px !important;
 `;
 

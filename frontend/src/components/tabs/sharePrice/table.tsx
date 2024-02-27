@@ -7,24 +7,26 @@ import { getAppDataSelector } from "store/app";
 
 import { TableContainer } from "./index.styles";
 
+import { COLORS } from "colors";
+
 export default function SharePriceTable() {
   const { stockPriceData, stockLoading } = useAppSelector(getAppDataSelector);
 
   const getChipColors = (value: string) => {
-    let backgroundColor = "#D0F2F0";
-    let textColor = "#11D1C6";
+    let backgroundColor = COLORS.primary?.[200];
+    let textColor = COLORS.primary?.[600];
     switch (value) {
       case "up":
-        backgroundColor = "#D0F2F0";
-        textColor = "#11D1C6";
+        backgroundColor = COLORS.primary?.[200];
+        textColor = COLORS.primary?.[600];
         break;
       case "down":
-        backgroundColor = "#F2C6C6";
-        textColor = "#EB1919";
+        backgroundColor = COLORS.success?.[400];
+        textColor = COLORS.warning?.[100];
         break;
       case "flat":
-        backgroundColor = "#DEE9FC";
-        textColor = "#4E80EE";
+        backgroundColor = COLORS.secondary?.[600];
+        textColor = COLORS.secondary?.[200];
         break;
       default:
         break;

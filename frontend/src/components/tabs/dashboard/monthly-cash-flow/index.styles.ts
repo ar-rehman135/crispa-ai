@@ -1,16 +1,16 @@
 import styled from "@emotion/styled";
 import { Stack } from "@mui/material";
 
-import { COLORS } from "colors";
+import { ITheme } from "theme/types";
 
-export const ChartContainer = styled("div")`
+export const ChartContainer = styled("div")<ITheme>`
   margin-top: 20px;
-  background-color: ${COLORS.WHITE};
+  background-color: ${({ theme }) => theme.palette.common.white};
   border-radius: 16px;
   padding: 20px;
   .custom-tooltip {
-    background-color: ${COLORS.BLACK};
-    color: ${COLORS.WHITE};
+    background-color: ${({ theme }) => theme.palette.common.black};
+    color: ${({ theme }) => theme.palette.common.white};
     padding: 10px 15px;
     width: 250px;
     border-radius: 10px;
@@ -19,7 +19,7 @@ export const ChartContainer = styled("div")`
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: ${COLORS.GREEN_100};
+    background: ${({ theme }) => theme.palette.grey[500]};
   }
   .flex {
     display: flex;
@@ -31,13 +31,13 @@ export const ChartContainer = styled("div")`
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: ${COLORS.BLUE_700};
+    background: ${({ theme }) => theme.palette.secondary[400]};
   }
   .pink-dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: ${COLORS.PINK_100};
+    background: ${({ theme }) => theme.palette.secondary[700]};
   }
   .icon-reverse {
     position: absolute;
@@ -63,18 +63,18 @@ export const StyledSubHeading = styled.h3`
   margin: 0px !important;
 `;
 
-export const StyledSelect = styled.select({
-  borderRadius: "20px !important", // Rounded borders
+export const StyledSelect = styled.select<ITheme>(({ theme }) => ({
+  borderRadius: "20px !important",
   height: "40px",
   fontSize: 14,
   padding: "0px 10px",
-  border: `1px solid ${COLORS.GREEN_100} !important`,
-  color: COLORS.BLUE_400,
+  border: `1px solid ${theme.palette.success.main} !important`,
+  color: theme.palette.primary[400], 
   fontWeight: 700,
   ":focus": {
-    border: `1px solid ${COLORS.GREEN_100} !important`,
+    border: `1px solid ${theme.palette.grey[500]} !important`,
   },
-});
+}));
 
 export const LegendContainer = styled(Stack)(() => ({
   flexDirection: "row",

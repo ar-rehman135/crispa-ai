@@ -2,6 +2,7 @@ import { PaletteOptions } from "@mui/material";
 
 export const COLORS: PaletteOptions = {
   grey: {
+    100: "#9da3ae",
     200: "#F0F2FE",
     300: "#666666",
     400: "#f2f6f7",
@@ -19,22 +20,37 @@ export const COLORS: PaletteOptions = {
     400: "#728BBE",
     500: "#536DFE",
     600: "#DEE9FC",
+    700: "#EC56CB",
+    800: "#EC55CB",
+    900: "#77778e0d",
   },
   primary: {
     main: "#252D46",
-    900: "#7140AF",
-    800: "#9E7CC9",
+    100: "#5343BF",
+    200: "#D0F2F0",
+    300: "#6052D9",
+    400: "#43B3F2",
+    500: "#F2F6F7",
+    600: "#11D1C6",
     700: "#CCBBE1",
+    800: "#9E7CC9",
+    900: "#7140AF",
   },
   success: {
-    main: "#44d799",
-    900: "#8BCB7D",
-    800: "#AFDAA6",
-    700: "#D6EAD0",
+    100: "#03A661",
+    200: "#3D3D3D",
+    300: "#D2D2D2",
+    400: "#F2C6C6",
+    500: "#44d799",
     600: "#F1FAEF",
+    700: "#D6EAD0",
+    800: "#AFDAA6",
+    900: "#8BCB7D",
   },
   warning: {
     main: "#E2B100",
+    100: "#EB1919",
+    200: "#2dd4cf",
     900: "#E9C33F",
     800: "#EDD57C",
     700: "#F4E7BB",
@@ -42,10 +58,13 @@ export const COLORS: PaletteOptions = {
   },
   info: {
     main: "#2A96F3",
-    900: "#70B5FA",
-    800: "#9FCCFA",
-    700: "#CDE3FA",
+    100: "#0BC27540",
+    200: "#F2C6C6FF",
+    300: "#115c5e",
     600: "#E7F0F9",
+    700: "#CDE3FA",
+    800: "#9FCCFA",
+    900: "#70B5FA",
   },
   error: {
     main: "#F44336",
@@ -54,4 +73,6 @@ export const COLORS: PaletteOptions = {
     700: "#FBD5D2",
     600: "#F8E9E7",
   },
+
 };
+

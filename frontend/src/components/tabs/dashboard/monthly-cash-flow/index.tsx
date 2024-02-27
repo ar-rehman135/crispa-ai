@@ -93,7 +93,7 @@ const MonthlyCashFlowChart = () => {
         top: 5,
         left: 0,
         blur: 3,
-        color: COLORS.BLACK,
+        color: COLORS.common?.black,
         opacity: 0.1,
       },
     },
@@ -113,9 +113,9 @@ const MonthlyCashFlowChart = () => {
       width: [4, 0, 0], // Setting line width for 'Net' and no line for 'Inflow' and 'Outflow'
     },
     grid: {
-      borderColor: COLORS.LIGHT_GREY,
+      borderColor: COLORS.primary?.[500],
     },
-    colors: [COLORS.BLUE_700, COLORS.GREEN_100, COLORS.PINK_200],
+    colors: [COLORS.secondary?.[400], COLORS.success?.[500], COLORS.secondary?.[800]],
     yaxis: {
       labels: {
         formatter: function (y: number) {
@@ -128,14 +128,14 @@ const MonthlyCashFlowChart = () => {
       categories: generateXAxisCategories(cashFlowData),
       axisBorder: {
         show: true,
-        color: COLORS.SILVER_100,
+        color: COLORS.secondary?.[900],
         offsetX: 0,
         offsetY: 0,
       },
       axisTicks: {
         show: true,
         borderType: "solid",
-        color: COLORS.SILVER_100,
+        color: COLORS.secondary?.[900],
         offsetX: 0,
         offsetY: 0,
       },

@@ -1,13 +1,15 @@
 import styled from "@emotion/styled";
 import { Stack } from "@mui/material";
 
-export const ChartContainer = styled("div")`
+import { ITheme } from "theme/types";
+
+export const ChartContainer = styled("div")<ITheme>`
   margin-top: 20px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.palette.common.white};
   border-radius: 16px;
   padding: 20px;
   .custom-tooltip {
-    background-color: black;
+    background-color: ${({ theme }) => theme.palette.common.black};
     color: white;
     padding: 10px 15px;
     width: 250px;
@@ -17,7 +19,7 @@ export const ChartContainer = styled("div")`
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #57e9e0;
+    background: ${({ theme }) => theme.palette.secondary[300]};
   }
   .flex {
     display: flex;
@@ -29,13 +31,13 @@ export const ChartContainer = styled("div")`
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #4e80ee;
+    background: ${({ theme }) => theme.palette.secondary[200]};
   }
   .pink-dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #ec55cb;
+    background: ${({ theme }) => theme.palette.secondary[800]};
   }
   .icon-reverse {
     position: absolute;
@@ -83,8 +85,8 @@ export const TextContainer = styled("div")(({ color }) => ({
   fontWeight: "bold",
 }));
 
-export const ActualLine = styled("div")(() => ({
-  background: "#536DFE",
+export const ActualLine = styled("div")<ITheme>(({ theme }) => ({
+  background: theme.palette.secondary[500],
   width: 30,
   height: 10,
   borderRadius: 10,

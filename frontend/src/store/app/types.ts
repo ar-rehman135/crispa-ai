@@ -30,7 +30,7 @@ export interface IEntryListData {
 export interface IAppState {
   stockName: string;
   stockPriceData: IStockPrice;
-  entryListData:IEntryListData[],
+  entryListData: IEntryListData[];
   stockLoading: boolean;
   monthRange: number;
 }

@@ -17,7 +17,11 @@ const generateXAxisCategories = (data: IStockPriceData[]) => {
   });
 };
 
-const PriceChart = () => {
+interface IPriceChart {
+  isLoading: boolean;
+}
+
+const PriceChart = (_props: IPriceChart) => {
   const { stockPriceData } = useAppSelector(getAppDataSelector);
 
   const options: ApexOptions = {

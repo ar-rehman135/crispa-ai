@@ -1,27 +1,26 @@
 import { useQuery } from "react-query";
-import { toast } from "react-toastify";
 
-import { useAppDispatch } from "./useReduxTypedHooks";
-import { fetchEntryListTableData } from "apis/api";
-import { setEntryListData } from "store/app";
+import { fetchEntryLists } from "services/api";
+interface useEntryListsOptions {
+  onSuccess?: (data: any) => void;
+  onError?: (error: any) => void;
+  enabledOnMount?: boolean;
+}
 
-export const useEntryListData = () => {
-  const dispatch = useAppDispatch();
+export const useEntryLists = (options: useEntryListsOptions) => {
+  const { onError, onSuccess, enabledOnMount = true } = options;
 
   const { isLoading, error, refetch } = useQuery(
-    ["entryListData"],
-    () => fetchEntryListTableData(),
+    ["entryLists"],
+    () => fetchEntryLists(),
     {
-      enabled: true,
+      enabled: enabledOnMount,
+      retry: false,
       onSuccess: (data) => {
-        dispatch(setEntryListData(data));
+        if (onSuccess) onSuccess(data);
       },
       onError: (error) => {
-        toast.error(
-          error instanceof Error
-            ? error.message
-            : "Error fetching entry list table data"
-        );
+        if (onError) onError(error);
       },
     }
   );

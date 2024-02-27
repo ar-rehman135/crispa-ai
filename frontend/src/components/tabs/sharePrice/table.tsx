@@ -4,35 +4,38 @@ import { Chip, Grid } from "@mui/material";
 import DataTable from "components/datatable";
 import { useAppSelector } from "hooks/useReduxTypedHooks";
 import { getAppDataSelector } from "store/app";
+import { COLORS } from "colors";
 
 import { TableContainer } from "./index.styles";
 
-import { COLORS } from "colors";
+interface IPriceTable {
+  isLoading: boolean;
+}
 
-export default function SharePriceTable() {
-  const { stockPriceData, stockLoading } = useAppSelector(getAppDataSelector);
+const getChipColors = (value: string) => {
+  let backgroundColor = COLORS.primary?.[200];
+  let textColor = COLORS.primary?.[600];
+  switch (value) {
+    case "up":
+      backgroundColor = COLORS.primary?.[200];
+      textColor = COLORS.primary?.[600];
+      break;
+    case "down":
+      backgroundColor = COLORS.success?.[400];
+      textColor = COLORS.warning?.[100];
+      break;
+    case "flat":
+      backgroundColor = COLORS.secondary?.[600];
+      textColor = COLORS.secondary?.[200];
+      break;
+    default:
+      break;
+  }
+  return { backgroundColor, textColor };
+};
 
-  const getChipColors = (value: string) => {
-    let backgroundColor = COLORS.primary?.[200];
-    let textColor = COLORS.primary?.[600];
-    switch (value) {
-      case "up":
-        backgroundColor = COLORS.primary?.[200];
-        textColor = COLORS.primary?.[600];
-        break;
-      case "down":
-        backgroundColor = COLORS.success?.[400];
-        textColor = COLORS.warning?.[100];
-        break;
-      case "flat":
-        backgroundColor = COLORS.secondary?.[600];
-        textColor = COLORS.secondary?.[200];
-        break;
-      default:
-        break;
-    }
-    return { backgroundColor, textColor };
-  };
+export default function SharePriceTable({ isLoading }: IPriceTable) {
+  const { stockPriceData } = useAppSelector(getAppDataSelector);
 
   const columns: GridColDef[] = [
     {
@@ -115,7 +118,7 @@ export default function SharePriceTable() {
     <TableContainer>
       <Grid container>
         <Grid item xs={8}>
-          <DataTable columns={columns} data={data} isLoading={stockLoading} />
+          <DataTable columns={columns} data={data} isLoading={isLoading} />
         </Grid>
       </Grid>
     </TableContainer>

@@ -1,42 +1,71 @@
-# Introduction to the crispa full stack test tasks
+# Crispa Full Stack Test Project Handover
 
-The test tasks are designed for you to showcase both your frontend and backend skills.
+## Running the Project
 
-I have tried to be as comprehensive as possible in the explanations and acceptance criteria for each ticket, but if something is not clear, feel free to make a reasonable assumption.
+### Backend:
 
-The graphs and the data table are from the actual design for Crispa, so if we continue to work together, your first task will be to implement them in the Crispa app.
+1. Clone the project repository from your GitHub account.
+2. Navigate to the backend directory.
+3. Install dependencies using pip:
+   pip install -r requirements.txt
 
-You are not expected to complete all the tickets within the 8 hours, just do as many as you can. It is up to you if you want to spend extra time on completing the remaining ones.
+4. Apply Django migrations:
 
-## What I will be looking for:
+python manage.py migrate
 
-- That functionality works as expected and is bug-free
-- That the UI follows the design as closely as possible (and that any deviations from the design are based on reasonable considerations)
-- That the code is well-structured
-- That names of variables, functions classes etc. are clear and semantic
-- That the code contains appropriate comments to make it easily accessible
-- That the written handover is clear and concise, so I can easily run the project, run tests etc.
+5. Start the backend server:
 
-## Other instructions
+python manage.py runserver
 
-- Don’t worry about authentication. In the Crispa app we use Auth0 for user authentication and JWT authentication for all API requests. So I don’t want you to spend time setting any of this up for this test project
-- The tickets in shortcut must be handled in order, starting with #1. No skipping. Move tickets to in progress and done as appropriate
-- There must be at least one commit per ticket, and it should have a meaningful commit message
+6.  The backend server will be accessible at http://localhost:8000.
 
-## How to get started
+7.  Creates endpoints for each model, allowing for both single and bulk creation through POST requests. If you POST a single object (in JSON format) to these endpoints, it will create one instance. If you POST a list of objects, it will create multiple instances in bulk,
 
-- Clone this repo to a new repo in your own GitHub account and commit all work to that repo
-- You will receive a seperate invite to the Shortcut board where you can start working on the tickets
-- You will also reveive a link to a figma file with the design for the graphs and the data table as well as some general design guidelines, like colors etc. NB: For the fonts, use the Google fonts mentioned in the styleguide in Figma. The actual font used in the Figma file is a paid font.
-- Run the project with `docker-compose up --build`
-- Django migrations are performed automatically when the project is started
-- The frontend is served on `localhost:3000` and the backend on `localhost:8000`
-- You should see 'Hello World' in the browser on `localhost:3000` and on `localhost:8000/api/hello` you should see a json response with 'Hello World'
+    For single creation of an account, you can pass data to the create endpoint like this:
 
-## Handover
+    ```json
+    {
+      "number": "stri",
+      "name": "string",
+      "default_accounting_type": "debit"
+    }
 
-- Replace this readme text with a brief written handover of the project. This should include:
-  - How to run the project
-  - Any instructions needed to run the tests
-  - Any other relevant information
-- Make sure to push the code to your GitHub repo and send me the link to it in the chat on upwork
+    For bulk creation of accounts, you can pass an array of objects to the create endpoint:
+      [
+        {
+          "number": "TEST",
+          "name": "Name",
+          "default_accounting_type": "debit"
+        },
+        {
+          "number": "Tes1",
+          "name": "Name 1",
+          "default_accounting_type": "debit"
+        },
+        {
+          "number": "Tes2",
+          "name": "Name 2",
+          "default_accounting_type": "credit"
+        }
+      ]
+    ```
+
+### Frontend:
+
+1. After cloning the project repository, navigate to the frontend directory.
+2. Install dependencies using npm or yarn:
+
+npm install or yarn install
+
+3. Once dependencies are installed, start the frontend server with:
+
+npm start or yarn start
+
+4. The frontend will be served at http://localhost:3000.
+
+## Running Tests
+
+### Backend:
+
+To run tests for the backend, execute the following command:
+python manage.py test

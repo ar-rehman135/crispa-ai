@@ -61,6 +61,8 @@ export const COLORS: PaletteOptions = {
     100: "#0BC27540",
     200: "#F2C6C6FF",
     300: "#115c5e",
+    400: "#F4F5F6",
+    500: '#FFFFFF',
     600: "#E7F0F9",
     700: "#CDE3FA",
     800: "#9FCCFA",

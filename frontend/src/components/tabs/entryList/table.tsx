@@ -187,26 +187,23 @@ import { Grid } from "@mui/material";
 import DataTable from "components/datatable";
 import { useAppSelector } from "hooks/useReduxTypedHooks";
 import { getAppDataSelector } from "store/app";
-import { COLORS } from "colors";
-import { CustomChip } from "components/chip";
-import { getChipColors } from "utils";
 
 import { TableContainer } from "./index.styles";
 
-const columnsOrderWithMinWidth = [
-  { field: "id", minWidth: 100 },
-  { field: "description", minWidth: 250 },
-  { field: "date", minWidth: 150 },
-  { field: "account", minWidth: 180 },
-  { field: "type", minWidth: 150 },
-  { field: "currency", minWidth: 180 },
-  { field: "amount", minWidth: 110 },
-  { field: "fx Rate", minWidth: 150 },
-  { field: "convertedCurrency", minWidth: 180 },
-  { field: "convertedNet", minWidth: 110 },
-  { field: "defaultType", minWidth: 150 },
-  { field: "status", minWidth: 150 },
-  { field: "reconciled", minWidth: 200 },
+const predefinedFields = [
+  "id",
+  "description",
+  "date",
+  "account",
+  "type",
+  "currency",
+  "amount",
+  "fx Rate",
+  "convertedCurrency",
+  "convertedNet",
+  "defaultType",
+  "status",
+  "reconciled",
 ];
 
 const columnGroupingModel: GridColumnGroupingModel = [
@@ -230,76 +227,16 @@ const EntryListTable = ({ isLoading }: IEntryListTable) => {
   const { entryListData } = useAppSelector(getAppDataSelector);
   const FX_RATE = 7.45;
 
-  const dynamicColumns: GridColDef[] = columnsOrderWithMinWidth.map((col) => {
-    const isNumeric =
-      (entryListData.length > 0 &&
-        typeof entryListData[0][col.field] === "number" &&
-        !isNaN(entryListData[0][col.field])) ||
-      col.field === "fx Rate" || col.field === "convertedNet";
-
+  const data = entryListData.map((entry) => {
     return {
-      field: col.field,
-      headerName:
-        col.field === "amount"
-          ? "Net"
-          : col.field === "convertedCurrency"
-          ? "Currency"
-          : col.field === "defaultType"
-          ? "Type"
-          : col.field === "convertedNet"
-          ? "Net"
-          : col.field.replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase()),
-      type: isNumeric ? "number" : "string",
-      align: isNumeric ? "right" : "left",
-      headerAlign: isNumeric ? "right" : "left",
-      minWidth: col.minWidth,
-      renderCell:
-        col.field === "id"
-          ? (params: GridCellParams) => {
-              return (params.value as string).slice(-4);
-            }
-          : col.field === "fx Rate"
-          ? (params: GridCellParams) => {
-              return FX_RATE;
-            }
-          : col.field === "status"
-          ? (params: GridCellParams) => {
-            console.log({params})
-              const label = (params.value as string).toUpperCase();
-              const { backgroundColor, textColor } = getChipColors(label);
-              return (
-                <CustomChip
-                  label={label}
-                  backgroundColor={backgroundColor}
-                  textColor={textColor}
-                />
-              );
-            }
-          : col.field === "reconciled"
-          ? (params: GridCellParams) => {
-              const backgroundColor = params.value
-                ? COLORS.info?.[100]
-                : COLORS.info?.[200];
-              const textColor = params.value
-                ? COLORS.success?.[100]
-                : COLORS.warning?.[100];
-              const label = params.value ? "YES" : "NO";
-              return (
-                <CustomChip
-                  label={label}
-                  backgroundColor={backgroundColor}
-                  textColor={textColor}
-                />
-              );
-            }
-          : col.field === "convertedNet"
-          ? (params: GridCellParams) => {
-              const convertedNetValue = 7.45; // Replace this with your logic
-              const amountValue = params.row.amount || 0; // Add null-check here
-              const result = convertedNetValue * amountValue;
-              return result;
-            }
-          : undefined,
+      ...entry,
+      id: (entry.id as string).slice(-4),
+      ["fx Rate"]: FX_RATE,
+      amount: entry.amount,
+      currency: entry.currency,
+      convertedNet: (entry.amount || 0) * FX_RATE,
+      convertedCurrency: "EDK",
+      reconciled: entry.reconciled ? "YES" : "NO",
     };
   });
 
@@ -308,11 +245,12 @@ const EntryListTable = ({ isLoading }: IEntryListTable) => {
       <Grid container>
         <Grid item xs={12}>
           <DataTable
-            columns={dynamicColumns}
-            data={entryListData}
+            predefinedOrder={predefinedFields}
+            data={data}
             isLoading={isLoading}
             columnGroupingModel={columnGroupingModel}
             height={"calc(100vh - 150px)"}
+            showAllEntries
           />
         </Grid>
       </Grid>

@@ -73,6 +73,5 @@ export const COLORS: PaletteOptions = {
     700: "#FBD5D2",
     600: "#F8E9E7",
   },
-
 };
 

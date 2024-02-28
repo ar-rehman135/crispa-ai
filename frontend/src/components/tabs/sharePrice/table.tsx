@@ -14,66 +14,14 @@ interface IPriceTable {
   isLoading: boolean;
 }
 
-const columns: GridColDef[] = [
-  {
-    field: "date",
-    headerName: "Date",
-    type: "string",
-    width: 150,
-    align: "left",
-    headerAlign: "left",
-  },
-  {
-    field: "open",
-    headerName: "Open",
-    type: "number",
-    width: 200,
-    align: "right",
-    headerAlign: "right",
-  },
-  {
-    field: "high",
-    headerName: "High",
-    type: "number",
-    width: 200,
-    align: "right",
-    headerAlign: "right",
-  },
-  {
-    field: "close",
-    headerName: "Close",
-    type: "number",
-    width: 200,
-    align: "right",
-    headerAlign: "right",
-  },
-  {
-    field: "volume",
-    headerName: "Volume",
-    type: "number",
-    width: 200,
-    align: "right",
-    headerAlign: "right",
-  },
-  {
-    field: "movement",
-    headerName: "Movement",
-    type: "string",
-    width: 200,
-    align: "left",
-    headerAlign: "left",
-    renderCell: (params: GridCellParams) => {
-      const label = (params.value as string).toUpperCase();
-      const { backgroundColor, textColor } = getChipColors(label);
-      return (
-        <CustomChip
-          label={label}
-          backgroundColor={backgroundColor}
-          textColor={textColor}
-        />
-      );
-    },
-  },
+// Define the order of predefined columns with minWidth
+const columnsOrderWithMinWidth = [
+  { field: "date", minWidth: 150 },
+  { field: "open", minWidth: 130 },
+  { field: "high", minWidth: 130 },
+  { field: "close", minWidth: 130 },
+  { field: "volume", minWidth: 180 },
+  { field: "movement", minWidth: 250 },
 ];
 
 export default function SharePriceTable({ isLoading }: IPriceTable) {
@@ -85,6 +33,44 @@ export default function SharePriceTable({ isLoading }: IPriceTable) {
       id: `${index}-${dt.date}`,
     };
   });
+
+  // Dynamically generate columns based on data keys
+  const dynamicColumns: GridColDef[] = Object.keys(data[0]).map((key) => {
+    const isNumeric =
+      typeof data[0][key] === "number" || /^\d+$/.test(data[0][key].toString());
+    return {
+      field: key,
+      headerName: key.replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase()), // Replace '_' with ' ' and capitalize first letter
+      type: isNumeric ? "number" : "string",
+      align: isNumeric ? "right" : "left",
+      headerAlign: isNumeric ? "right" : "left",
+      renderCell:
+        key === "movement"
+          ? (params: GridCellParams) => {
+              const label = (params.value as string).toUpperCase();
+              const { backgroundColor, textColor } = getChipColors(label);
+              return (
+                <CustomChip
+                  label={label}
+                  backgroundColor={backgroundColor}
+                  textColor={textColor}
+                />
+              );
+            }
+          : undefined, // If it's not 'movement' column, set renderCell to undefined
+    };
+  });
+
+  // Sort predefined columns based on order
+  const columns: GridColDef[] = columnsOrderWithMinWidth
+    .map(({ field, minWidth }) => {
+      const col = dynamicColumns.find((col) => col.field === field);
+      if (col) {
+        col.minWidth = minWidth;
+      }
+      return col;
+    })
+    .filter((col) => col !== undefined) as GridColDef[];
 
   return (
     <TableContainer>

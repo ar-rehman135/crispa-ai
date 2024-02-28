@@ -1,25 +1,14 @@
 import React from "react";
-import { GridColDef, GridColumnGroupingModel } from "@mui/x-data-grid";
+import {
+  GridCellParams,
+  GridColDef,
+  GridColumnGroupingModel,
+} from "@mui/x-data-grid";
 import { TableContainer, StyledDataGrid } from "./index.styles";
 
-interface IDataTables {
-  columns: GridColDef[];
-  data: any[];
-  isLoading: boolean;
-  columnGroupingModel?: GridColumnGroupingModel;
-  height?: string | number;
-  decimalPlaces?: number;
-  showAllEntries?: boolean;
-}
-
-const DataTable: React.FC<IDataTables> = ({
-  columns,
-  data,
-  isLoading,
-  columnGroupingModel,
-  height = 700,
-  decimalPlaces = 2,
-  showAllEntries = false,
+const CustomCellRender: React.FC<GridCellParams> = ({
+  field,
+  value
 }) => {
   // Render cell with formatted monetary values
   const renderCell = (params: any) => {

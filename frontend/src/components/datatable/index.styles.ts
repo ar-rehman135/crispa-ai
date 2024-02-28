@@ -36,6 +36,7 @@ export const StyledDataGrid = styled(DataGrid)<ITheme>(({ theme }) => ({
       },
     },
   },
+
   "& .MuiDataGrid-columnHeaderTitle": {
     color: theme.palette.grey[300],
     fontWeight: "bolder",

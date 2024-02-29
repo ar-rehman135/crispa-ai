@@ -22,9 +22,6 @@ class CurrencyViewSet(BulkCreateModelMixin, viewsets.ModelViewSet):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
 
-from rest_framework import generics
-from rest_framework.response import Response
-
 class CombinedListView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         journal_entries = JournalEntryLines.objects.all()

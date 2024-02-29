@@ -63,7 +63,7 @@ class Command(BaseCommand):
             # Increment the date by one day for the next set of transactions
             accounting_date += timedelta(days=30)
 
-            # Stop after 720 iterations
+            # Stop after 50 iterations
             if _ >= 50:
                 break
 

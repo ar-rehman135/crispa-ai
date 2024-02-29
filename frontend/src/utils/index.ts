@@ -131,6 +131,14 @@ const chipColors = {
     backgroundColor: COLORS.common?.white,
     textColor: COLORS.common?.black,
   },
+  YES: {
+    backgroundColor: COLORS.info?.[100],
+    textColor: COLORS.success?.[100],
+  },
+  NO: {
+    backgroundColor: COLORS.info?.[200],
+    textColor: COLORS.warning?.[100],
+  },
 };
 
 // Function to get chip colors based on the chip value

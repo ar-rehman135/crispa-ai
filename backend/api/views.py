@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from .models import JournalEntryLines, Account, Currency
 from .serializers import *
-
+from datetime import datetime, timedelta
 
 class JournalEntryLinesViewSet(BulkCreateModelMixin, viewsets.ModelViewSet):
     queryset = JournalEntryLines.objects.all()
@@ -22,6 +22,8 @@ class CurrencyViewSet(BulkCreateModelMixin, viewsets.ModelViewSet):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
 
+from rest_framework import generics
+from rest_framework.response import Response
 
 class CombinedListView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
@@ -31,15 +33,19 @@ class CombinedListView(generics.ListAPIView):
         min_length = min(len(journal_entries), len(accounts), len(currencies))
 
         combined_data = []
+        base_date = datetime(2022, 1, 1)  # Start date for ascending order
+
         for i in range(min_length):
             entry = journal_entries[i]
             account = accounts[i]
             currency = currencies[i]
 
+            current_date = base_date + timedelta(days=i * 30)  # Increment by one month
+
             combined_entry = {
                 "id": entry.id,
                 "description": entry.description,
-                "date": entry.accounting_date,
+                "date": current_date.strftime("%Y-%m-%d"),  # Format date as string
                 "account": entry.account,
                 "amount": entry.amount,
                 "type": entry.account_type,
@@ -51,9 +57,10 @@ class CombinedListView(generics.ListAPIView):
             }
             combined_data.append(combined_entry)
 
-        return Response(combined_data)
-    
-    
+        # Return only the first 24 entries
+        response_data = combined_data[:24]
+
+        return Response(response_data)
 class CombinedReportView(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
         # Fetch data from JournalEntryLines and ForecastTransaction
@@ -61,7 +68,7 @@ class CombinedReportView(generics.ListAPIView):
 
         # Combine data into the report format
         report_data = {
-            'actual': combined_data['actual'],
+            'actual': combined_data['actual'][:24],
             'forecast_scenario_a': combined_data['forecast_scenario_a'].data,
             'forecast_scenario_b': combined_data['forecast_scenario_b'].data,
         }
@@ -69,15 +76,26 @@ class CombinedReportView(generics.ListAPIView):
         return Response(report_data)
 
     def get_combined_data(self):
-        journal_entries_queryset = JournalEntryLines.objects.all()
+        journal_entries_queryset = JournalEntryLines.objects.all()[:24]  # Take only the first 24 entries
         forecast_queryset = ForecastTransaction.objects.all()
+
+        # Generate base date for ascending order
+        base_date = datetime(2022, 1, 1)
+
+        # Incremented months for 'actual' entries
+        actual_entries = []
+        for i, entry in enumerate(journal_entries_queryset):
+            current_date = base_date + timedelta(days=i * 30)  # Increment by one month
+            entry_data = JournalEntryLinesSerializer(entry).data
+            entry_data['accounting_date'] = current_date.strftime("%Y-%m-%d")
+            actual_entries.append(entry_data)
 
         # Filter forecast data for scenarios 'a' and 'b'
         forecast_data_a = forecast_queryset.filter(scenario='a')
         forecast_data_b = forecast_queryset.filter(scenario='b')
 
         # Serialize data using the serializers
-        journal_entries_serializer = JournalEntryLinesSerializer(journal_entries_queryset, many=True)
+        journal_entries_serializer = JournalEntryLinesSerializer(actual_entries, many=True)
         forecast_serializer_a = ForecastTransactionSerializer(forecast_data_a, many=True)
         forecast_serializer_b = ForecastTransactionSerializer(forecast_data_b, many=True)
 

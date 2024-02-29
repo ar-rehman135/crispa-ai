@@ -61,10 +61,10 @@ class Command(BaseCommand):
             )
 
             # Increment the date by one day for the next set of transactions
-            accounting_date += timedelta(days=1)
+            accounting_date += timedelta(days=30)
 
             # Stop after 720 iterations
-            if _ >= 720:
+            if _ >= 50:
                 break
 
         self.stdout.write(self.style.SUCCESS(f'Successfully generated {total} fake transactions'))

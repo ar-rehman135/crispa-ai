@@ -20,35 +20,67 @@ const generateXAxisCategories = (data: IReportDataPoint[]) => {
     return formattedDate;
   });
 };
+
+// const generateXAxisCategories = (data: IReportDataPoint[]) => {
+//   // Generate categories with unique month-year combinations
+//   const uniqueCategories = new Set();
+//   data.forEach((item) => {
+//     const formattedDate = moment(item.accounting_date).format("MMM YYYY");
+//     uniqueCategories.add(formattedDate);
+//   });
+//   return Array.from(uniqueCategories);
+// };
 interface IReportGraph {
   isLoading: boolean;
 }
 
 const CashChart = React.memo(({ isLoading }: IReportGraph) => {
   const { reportData: data } = useAppSelector(getAppDataSelector);
-  // Series data for the chart
+  // // Series data for the chart
   const series = [
     {
       name: "Actuals",
-      data: data.actual
-        .map((item) => item.amount)
-        // .concat(Array(data.forecast_scenario_a.length).fill(null)),
+      data: data.actual.map((item) => item.amount),
     },
     {
       name: "Scenario A",
-      data: Array(data.forecast_scenario_a.length)
-        .fill(null)
-        .concat(data.forecast_scenario_a.map((item) => item.amount).slice(0,10)),
+      data: [
+        ...Array(data.actual.length).fill(null),
+        ...data.forecast_scenario_a.map((item) => item.amount),
+      ],
     },
     {
       name: "Scenario B",
-      data: Array(data.forecast_scenario_b.length)
-        .fill(null)
-        .concat(data.forecast_scenario_b.map((item) => item.amount).slice(0,10)),
+      data: [
+        ...Array(data.actual.length).fill(null),
+        ...data.forecast_scenario_b.map((item) => item.amount),
+      ],
     },
   ];
+  // const actualData = data.actual.map(item => item.amount);
+
+  // // Assuming the first entry of forecast data is the duplicate January 2024
+  // const forecastScenarioA = data.forecast_scenario_a.slice(1).map(item => item.amount);
+  // const forecastScenarioB = data.forecast_scenario_b.slice(1).map(item => item.amount);
+
+  // // Prepare the series without duplicating January 2024
+  // const series = [
+  //   {
+  //     name: "Actuals",
+  //     data: actualData,
+  //   },
+  //   {
+  //     name: "Scenario A",
+  //     data: [...Array(data.actual.length - 1).fill(null), ...forecastScenarioA],
+  //   },
+  //   {
+  //     name: "Scenario B",
+  //     data: [...Array(data.actual.length - 1).fill(null), ...forecastScenarioB],
+  //   },
+  // ];
 
   const xAxisCategories = generateXAxisCategories([
+    ...data.actual,
     ...data.forecast_scenario_a,
     ...data.forecast_scenario_b,
   ]);
@@ -125,15 +157,15 @@ const CashChart = React.memo(({ isLoading }: IReportGraph) => {
       },
     },
     tooltip: {
-      enabled: false,
+      enabled: true,
       // Define a function to render custom tooltip
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         const obj = data.actual[dataPointIndex];
         let cashBalance = "";
         let date = "";
         if (obj) {
-          cashBalance = obj["cashBalance"].toString();
-          date = moment(obj["date"]).format("MMMM, YYYY");
+          cashBalance = obj["amount"].toString();
+          date = moment(obj["accounting_date"]).format("MMMM, YYYY");
         } else {
           return null;
         }

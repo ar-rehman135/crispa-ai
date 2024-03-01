@@ -2,6 +2,7 @@ import random
 from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand
 from api.models import JournalEntryLines, ForecastTransaction
+from dateutil.relativedelta import relativedelta  # Import relativedelta
 
 
 class Command(BaseCommand):
@@ -17,10 +18,12 @@ class Command(BaseCommand):
 
         # Start date for actual transactions (12 months ago from today)
         start_date_actual = current_date - timedelta(days=365)
-        end_date_actual = current_date
+        end_date_actual = current_date - \
+            timedelta(days=30)  # End one month before today
 
         # Start date for forecast transactions (where actual ends)
-        start_date_forecast = end_date_actual + timedelta(days=1)
+        start_date_forecast = end_date_actual.replace(
+            day=1) + timedelta(days=30)  # Start from the next month
         end_date_forecast = start_date_forecast + \
             timedelta(days=730)  # Forecast for 24 months
 
@@ -71,5 +74,9 @@ class Command(BaseCommand):
                 )
 
             # Move to the next month
-            current_date += timedelta(days=30)
-            count -= 1
+            # Use relativedelta to move to the next month
+            current_date += relativedelta(months=1)
+            count -= 1  # Decrement the count of remaining transactions
+
+            # Ensure the current date does not exceed the end date
+            current_date = min(current_date, end_date)

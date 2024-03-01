@@ -6,10 +6,12 @@ ACCOUNT_TYPE_CHOICES = [
     ("debit", "Debit"),
     ("credit", "Credit"),
 ]
+
 SCENARIO_CHOICES = [
-        ('a', 'Scenario A'),
-        ('b', 'Scenario B'),
+    ('a', 'Scenario A'),
+    ('b', 'Scenario B'),
 ]
+
 
 class JournalEntryLines(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -20,7 +22,8 @@ class JournalEntryLines(models.Model):
     reconciled = models.BooleanField()
     currency = models.CharField(max_length=50)
     amount = models.IntegerField()
-    account_type = models.CharField(max_length=20, choices=ACCOUNT_TYPE_CHOICES)
+    account_type = models.CharField(
+        max_length=20, choices=ACCOUNT_TYPE_CHOICES)
 
     class Meta:
         verbose_name = _("JournalEntryLine")
@@ -68,7 +71,8 @@ class ForecastTransaction(models.Model):
     reconciled = models.BooleanField()
     currency = models.CharField(max_length=50, default='EUR')
     amount = models.IntegerField()
-    account_type = models.CharField(max_length=20, choices=ACCOUNT_TYPE_CHOICES)
+    account_type = models.CharField(
+        max_length=20, choices=ACCOUNT_TYPE_CHOICES)
 
     class Meta:
         verbose_name = _("ForecastTransaction")

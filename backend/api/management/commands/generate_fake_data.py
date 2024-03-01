@@ -1,70 +1,75 @@
 import random
 from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand
-from api.models import ForecastTransaction
+from api.models import JournalEntryLines, ForecastTransaction
+
 
 class Command(BaseCommand):
     help = 'Generate fake transactions for testing purposes'
 
-    def add_arguments(self, parser):
-        parser.add_argument('total', type=int, help='Indicates the number of fake transactions to be generated')
-
     def handle(self, *args, **kwargs):
-        total = kwargs['total']
-        accounts = ['Salary', 'Rent', 'Utilities', 'Office Supplies', 'Sales Revenue', 'Advertising', 'Tax',
-                    'Loan Repayment', 'Investments', 'Dividends', 'Insurance', 'Consulting Fees',
-                    'Equipment Purchase', 'Membership Dues', 'Interest Income', 'Legal Fees',
-                    'Travel Expenses', 'Loan Disbursement', 'Repair & Maintenance', 'Charitable Donations']
-
         # Delete old data
+        JournalEntryLines.objects.all().delete()
         ForecastTransaction.objects.all().delete()
 
-        # Start with the current date
-        accounting_date = datetime.now()
+        # Current date
+        current_date = datetime.now()
 
-        for _ in range(total):
-            # Randomly choose an account
-            account = random.choice(accounts)
+        # Start date for actual transactions (12 months ago from today)
+        start_date_actual = current_date - timedelta(days=365)
+        end_date_actual = current_date
 
-            # Determine the account type and description based on the chosen account
-            if account in ['Sales Revenue', 'Interest Income', 'Dividends', 'Consulting Fees']:
-                account_type = 'credit'
-                description = f"Received payment for {account}"
-            else:
-                account_type = 'debit'
-                description = f"Payment for {account}"
+        # Start date for forecast transactions (where actual ends)
+        start_date_forecast = end_date_actual + timedelta(days=1)
+        end_date_forecast = start_date_forecast + \
+            timedelta(days=730)  # Forecast for 24 months
 
-            # Create debit entry with scenario 'a'
-            ForecastTransaction.objects.create(
-                accounting_date=accounting_date,
-                account=account,
-                state='draft',
-                description=description,
-                reconciled=False,
-                currency='EUR',
-                amount=random.randint(100, 5000),
-                account_type=account_type,
-                scenario='a'
-            )
+        # Generate actual transactions (12 months)
+        self.generate_transactions(
+            start_date_actual, end_date_actual, 'booked', 'Actual Transaction', JournalEntryLines, 12)
 
-            # Create credit entry with scenario 'b'
-            ForecastTransaction.objects.create(
-                accounting_date=accounting_date,
-                account=random.choice(['Expenses', 'Revenue']),
-                state='draft',
-                description=f"{account_type.capitalize()} entry for {account}",
-                reconciled=False,
-                currency='EUR',
-                amount=random.randint(100, 5000),
-                account_type='credit' if account_type == 'debit' else 'debit',
-                scenario='b'
-            )
+        # Generate forecast transactions for scenario A (24 months)
+        self.generate_transactions(start_date_forecast, end_date_forecast,
+                                   'draft', 'Forecast Transaction', ForecastTransaction, 24, 'a')
 
-            # Increment the date by one day for the next set of transactions
-            accounting_date += timedelta(days=30)
+        # Generate forecast transactions for scenario B (24 months)
+        self.generate_transactions(start_date_forecast, end_date_forecast,
+                                   'draft', 'Forecast Transaction', ForecastTransaction, 24, 'b')
 
-            # Stop after 50 iterations
-            if _ >= 50:
-                break
+        self.stdout.write(self.style.SUCCESS(
+            'Successfully generated fake transactions'))
 
-        self.stdout.write(self.style.SUCCESS(f'Successfully generated {total} fake transactions'))
+    def generate_transactions(self, start_date, end_date, state, description_prefix, model, count, scenario=None):
+        # Loop through each month
+        current_date = start_date
+        while current_date <= end_date and count > 0:
+            # Create the transaction
+            if model == JournalEntryLines:  # Check if the model is JournalEntryLines
+                model.objects.create(
+                    accounting_date=current_date,
+                    account='Bank Account',
+                    state=state,
+                    description=f"{description_prefix}",
+                    reconciled=True if state == 'booked' else False,
+                    currency='EUR',
+                    amount=random.randint(100, 5000),
+                    # Assuming state 'booked' is debit, else credit
+                    account_type='debit' if state == 'booked' else 'credit',
+                )
+            elif model == ForecastTransaction:  # Check if the model is ForecastTransaction
+                model.objects.create(
+                    accounting_date=current_date,
+                    scenario=scenario,
+                    account='Bank Account',
+                    state=state,
+                    description=f"{description_prefix}",
+                    reconciled=True if state == 'booked' else False,
+                    currency='EUR',
+                    amount=random.randint(100, 5000),
+                    # Assuming state 'booked' is debit, else credit
+                    account_type='debit' if state == 'booked' else 'credit',
+                )
+
+            # Move to the next month
+            current_date += timedelta(days=30)
+            count -= 1

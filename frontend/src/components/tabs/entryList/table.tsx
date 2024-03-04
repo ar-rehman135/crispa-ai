@@ -177,11 +177,7 @@
 
 // export default EntryListTable;
 
-import {
-  GridCellParams,
-  GridColDef,
-  GridColumnGroupingModel,
-} from "@mui/x-data-grid";
+import { GridColumnGroupingModel } from "@mui/x-data-grid";
 import { Grid } from "@mui/material";
 
 import DataTable from "components/datatable";

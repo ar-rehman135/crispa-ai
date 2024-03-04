@@ -1,4 +1,4 @@
-from .models import Account, JournalEntryLines, Currency
+from .models import Account, JournalEntryLines, Currency, ForecastTransaction
 from rest_framework import serializers
 
 
@@ -24,3 +24,13 @@ class CombinedSerializer(serializers.Serializer):
     JournalEntryLine = JournalEntryLinesSerializer()
     Account = AccountSerializer()
     Currency = CurrencySerializer()
+
+
+class ForecastTransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ForecastTransaction
+        fields = "__all__"
+
+class CombinedReportSerializer(serializers.Serializer):
+    actual = serializers.ListSerializer(child=CombinedSerializer())
+    forecast = serializers.ListSerializer(child=ForecastTransactionSerializer())

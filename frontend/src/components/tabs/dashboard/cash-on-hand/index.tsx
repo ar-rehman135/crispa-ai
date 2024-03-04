@@ -28,23 +28,30 @@ interface IReportGraph {
 const CashChart = React.memo(({ isLoading }: IReportGraph) => {
   const { reportData: data } = useAppSelector(getAppDataSelector);
   // // Series data for the chart
+
+  const actualLength = data.actual ? data.actual.length : 0;
+
   const series = [
     {
       name: "Actuals",
-      data: data.actual.map((item) => item.amount),
+      data: data.actual ? data.actual.map((item) => item.amount) : [],
     },
     {
       name: "Scenario A",
       data: [
-        ...Array(data.actual.length - 1).fill(null),
-        ...data.forecast_scenario_a.map((item) => item.amount),
+        ...Array(actualLength ? actualLength - 1 : 0).fill(null),
+        ...(data.forecast_scenario_a
+          ? data.forecast_scenario_a.map((item) => item.amount)
+          : []),
       ],
     },
     {
       name: "Scenario B",
       data: [
-        ...Array(data.actual.length - 1).fill(null),
-        ...data.forecast_scenario_b.map((item) => item.amount),
+        ...Array(actualLength ? actualLength - 1 : 0).fill(null),
+        ...(data.forecast_scenario_b
+          ? data.forecast_scenario_b.map((item) => item.amount)
+          : []),
       ],
     },
   ];
@@ -129,8 +136,13 @@ const CashChart = React.memo(({ isLoading }: IReportGraph) => {
     tooltip: {
       enabled: true,
       // Define a function to render custom tooltip
-      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-        const obj = data.actual[dataPointIndex];
+      custom: function ({ dataPointIndex, w }) {
+        const combined = [
+          ...data.actual,
+          ...data.forecast_scenario_a,
+          ...data.forecast_scenario_b,
+        ];
+        const obj = combined[dataPointIndex];
         let cashBalance = "";
         let date = "";
         if (obj) {

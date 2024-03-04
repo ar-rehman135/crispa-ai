@@ -21,15 +21,6 @@ const generateXAxisCategories = (data: IReportDataPoint[]) => {
   });
 };
 
-// const generateXAxisCategories = (data: IReportDataPoint[]) => {
-//   // Generate categories with unique month-year combinations
-//   const uniqueCategories = new Set();
-//   data.forEach((item) => {
-//     const formattedDate = moment(item.accounting_date).format("MMM YYYY");
-//     uniqueCategories.add(formattedDate);
-//   });
-//   return Array.from(uniqueCategories);
-// };
 interface IReportGraph {
   isLoading: boolean;
 }
@@ -45,39 +36,18 @@ const CashChart = React.memo(({ isLoading }: IReportGraph) => {
     {
       name: "Scenario A",
       data: [
-        ...Array(data.actual.length).fill(null),
+        ...Array(data.actual.length - 1).fill(null),
         ...data.forecast_scenario_a.map((item) => item.amount),
       ],
     },
     {
       name: "Scenario B",
       data: [
-        ...Array(data.actual.length).fill(null),
+        ...Array(data.actual.length - 1).fill(null),
         ...data.forecast_scenario_b.map((item) => item.amount),
       ],
     },
   ];
-  // const actualData = data.actual.map(item => item.amount);
-
-  // // Assuming the first entry of forecast data is the duplicate January 2024
-  // const forecastScenarioA = data.forecast_scenario_a.slice(1).map(item => item.amount);
-  // const forecastScenarioB = data.forecast_scenario_b.slice(1).map(item => item.amount);
-
-  // // Prepare the series without duplicating January 2024
-  // const series = [
-  //   {
-  //     name: "Actuals",
-  //     data: actualData,
-  //   },
-  //   {
-  //     name: "Scenario A",
-  //     data: [...Array(data.actual.length - 1).fill(null), ...forecastScenarioA],
-  //   },
-  //   {
-  //     name: "Scenario B",
-  //     data: [...Array(data.actual.length - 1).fill(null), ...forecastScenarioB],
-  //   },
-  // ];
 
   const xAxisCategories = generateXAxisCategories([
     ...data.actual,
@@ -109,8 +79,8 @@ const CashChart = React.memo(({ isLoading }: IReportGraph) => {
       show: false,
       position: "top",
       horizontalAlign: "right",
-      offsetX: -15,
-      offsetY: -15,
+      offsetX: -5,
+      offsetY: -5,
       fontWeight: "bold",
     },
     stroke: {

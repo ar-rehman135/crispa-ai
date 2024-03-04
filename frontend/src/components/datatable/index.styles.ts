@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { Grid } from "@mui/material";
-import { alpha } from "@mui/material/styles";
 import { DataGrid, gridClasses } from "@mui/x-data-grid";
 
 import { ITheme } from "theme/types";

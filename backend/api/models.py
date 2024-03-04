@@ -7,6 +7,11 @@ ACCOUNT_TYPE_CHOICES = [
     ("credit", "Credit"),
 ]
 
+SCENARIO_CHOICES = [
+    ('a', 'Scenario A'),
+    ('b', 'Scenario B'),
+]
+
 
 class JournalEntryLines(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -17,7 +22,8 @@ class JournalEntryLines(models.Model):
     reconciled = models.BooleanField()
     currency = models.CharField(max_length=50)
     amount = models.IntegerField()
-    account_type = models.CharField(max_length=20, choices=ACCOUNT_TYPE_CHOICES)
+    account_type = models.CharField(
+        max_length=20, choices=ACCOUNT_TYPE_CHOICES)
 
     class Meta:
         verbose_name = _("JournalEntryLine")
@@ -53,3 +59,24 @@ class Currency(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ForecastTransaction(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    accounting_date = models.DateField(auto_now=False, auto_now_add=False)
+    scenario = models.CharField(max_length=25, choices=SCENARIO_CHOICES)
+    account = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    description = models.CharField(max_length=200)
+    reconciled = models.BooleanField()
+    currency = models.CharField(max_length=50, default='EUR')
+    amount = models.IntegerField()
+    account_type = models.CharField(
+        max_length=20, choices=ACCOUNT_TYPE_CHOICES)
+
+    class Meta:
+        verbose_name = _("ForecastTransaction")
+        verbose_name_plural = _("ForecastTransactions")
+
+    def __str__(self):
+        return f"{self.account} - {self.scenario}"

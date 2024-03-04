@@ -24,3 +24,14 @@ export const fetchEntryLists = async () => {
     throw new Error(getErrorMessage(err));
   }
 };
+
+export const fetchReportData = async () => {
+  try {
+    const url = `${API_BASE_URL}generate_report/`;
+    const response = await getRequest(url);
+    console.log({response: response.data});
+    return response.data;
+  } catch (err: any) {
+    throw new Error(getErrorMessage(err));
+  }
+};

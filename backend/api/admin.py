@@ -4,4 +4,5 @@ from .models import *
 admin.site.register(JournalEntryLines)
 admin.site.register(Account)
 admin.site.register(Currency)
+admin.site.register(ForecastTransaction)
 

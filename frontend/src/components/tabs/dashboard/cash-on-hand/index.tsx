@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ApexOptions } from "apexcharts";
 import moment from "moment";
 
@@ -10,130 +10,56 @@ import {
   StyledSubHeading,
 } from "./index.styles";
 import { COLORS } from "colors";
+import { useAppSelector } from "hooks/useReduxTypedHooks";
+import { getAppDataSelector } from "store/app";
+import { IReportDataPoint } from "store/app/types";
 
-interface CashBalanceData {
-  date: Date;
-  cashBalance: number;
-}
-
-interface ChartDataState {
-  actuals: CashBalanceData[];
-  scenarioA: CashBalanceData[];
-  scenarioB: CashBalanceData[];
-}
-
-const generateXAxisCategories = (data: CashBalanceData[]) => {
+const generateXAxisCategories = (data: IReportDataPoint[]) => {
   return data.map((item) => {
-    const formattedDate = moment(item.date).format("MMM").charAt(0);
+    const formattedDate = moment(item.accounting_date).format("MMM").charAt(0);
     return formattedDate;
   });
 };
 
-const generateRandomData = (
-  startDate: moment.Moment,
-  endDate: moment.Moment,
-  initialValue: number,
-  variance: number,
-  isScenario: boolean = false
-) => {
-  const data: any[] = [];
-  let currentDate = moment(startDate);
-  let cashBalance = initialValue;
+interface IReportGraph {
+  isLoading: boolean;
+}
 
-  while (currentDate <= endDate) {
-    if (!isScenario || currentDate.isAfter(startDate)) {
-      data.push({
-        date: currentDate.toDate(),
-        cashBalance: cashBalance,
-      });
-    }
-    // Adjust the cash balance randomly
-    cashBalance += Math.floor(Math.random() * variance) - variance / 2;
-    // Move to the next month
-    currentDate.add(1, "month");
-  }
+const CashChart = React.memo(({ isLoading }: IReportGraph) => {
+  const { reportData: data } = useAppSelector(getAppDataSelector);
+  // // Series data for the chart
 
-  return data;
-};
+  const actualLength = data.actual ? data.actual.length : 0;
 
-const CashChart = React.memo(() => {
-  const [data, setData] = useState<ChartDataState>({
-    actuals: [],
-    scenarioA: [],
-    scenarioB: [],
-  });
-
-  useEffect(() => {
-    const overallStartDate = moment().subtract(3, "years").startOf("month");
-    const overallEndDate = moment().endOf("month");
-    // Use clone to avoid mutating actualsEndDate
-    const actualsEndDate = moment(overallStartDate)
-      .add(1, "year")
-      .endOf("month")
-      .clone();
-
-    // Generate the actuals data
-    const actualsData = generateRandomData(
-      overallStartDate,
-      actualsEndDate,
-      5000,
-      1000
-    );
-
-    // Set the start date for the scenarios to be the day after the last actuals data point
-    const scenarioStartDate = moment(
-      actualsData[actualsData.length - 1].date
-    ).add(1, "day");
-
-    // Generate the scenario data
-    const scenarioAData = generateRandomData(
-      scenarioStartDate,
-      overallEndDate,
-      actualsData[actualsData.length - 1].cashBalance,
-      500,
-      true
-    );
-    const scenarioBData = generateRandomData(
-      scenarioStartDate,
-      overallEndDate,
-      actualsData[actualsData.length - 1].cashBalance,
-      2000,
-      true
-    );
-
-    setData({
-      actuals: actualsData,
-      scenarioA: scenarioAData,
-      scenarioB: scenarioBData,
-    });
-  }, []);
-
-  // Series data for the chart
   const series = [
     {
       name: "Actuals",
-      data: data.actuals
-        .map((item) => item.cashBalance)
-        .concat(Array(data.scenarioA.length).fill(null)),
+      data: data.actual ? data.actual.map((item) => item.amount) : [],
     },
     {
       name: "Scenario A",
-      data: Array(data.actuals.length)
-        .fill(null)
-        .concat(data.scenarioA.map((item) => item.cashBalance)),
+      data: [
+        ...Array(actualLength ? actualLength - 1 : 0).fill(null),
+        ...(data.forecast_scenario_a
+          ? data.forecast_scenario_a.map((item) => item.amount)
+          : []),
+      ],
     },
     {
       name: "Scenario B",
-      data: Array(data.actuals.length)
-        .fill(null)
-        .concat(data.scenarioB.map((item) => item.cashBalance)),
+      data: [
+        ...Array(actualLength ? actualLength - 1 : 0).fill(null),
+        ...(data.forecast_scenario_b
+          ? data.forecast_scenario_b.map((item) => item.amount)
+          : []),
+      ],
     },
   ];
 
   const xAxisCategories = generateXAxisCategories([
-    ...data.actuals,
-    ...data.scenarioA,
-    ...data.scenarioB,
+    ...data.actual,
+    ...data.forecast_scenario_a,
+    ...data.forecast_scenario_b,
   ]);
 
   const options: ApexOptions = {
@@ -160,8 +86,8 @@ const CashChart = React.memo(() => {
       show: false,
       position: "top",
       horizontalAlign: "right",
-      offsetX: -15,
-      offsetY: -15,
+      offsetX: -5,
+      offsetY: -5,
       fontWeight: "bold",
     },
     stroke: {
@@ -172,7 +98,11 @@ const CashChart = React.memo(() => {
     grid: {
       borderColor: COLORS.grey?.[400],
     },
-    colors: [COLORS.primary?.[100], COLORS.secondary?.[200], COLORS.primary?.[300]],
+    colors: [
+      COLORS.primary?.[100],
+      COLORS.secondary?.[200],
+      COLORS.primary?.[300],
+    ],
     yaxis: {
       labels: {
         formatter: function (y: number) {
@@ -206,13 +136,18 @@ const CashChart = React.memo(() => {
     tooltip: {
       enabled: true,
       // Define a function to render custom tooltip
-      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-        const obj = data.actuals[dataPointIndex];
+      custom: function ({ dataPointIndex, w }) {
+        const combined = [
+          ...data.actual,
+          ...data.forecast_scenario_a,
+          ...data.forecast_scenario_b,
+        ];
+        const obj = combined[dataPointIndex];
         let cashBalance = "";
         let date = "";
         if (obj) {
-          cashBalance = obj["cashBalance"].toString();
-          date = moment(obj["date"]).format("MMMM, YYYY");
+          cashBalance = obj["amount"].toString();
+          date = moment(obj["accounting_date"]).format("MMMM, YYYY");
         } else {
           return null;
         }
@@ -243,7 +178,12 @@ const CashChart = React.memo(() => {
         </div>
         <Legend />
       </div>
-      <DynamicChart series={series} options={options} height={250} />
+      <DynamicChart
+        series={series}
+        options={options}
+        height={250}
+        isLoading={isLoading}
+      />
     </ChartContainer>
   );
 });
